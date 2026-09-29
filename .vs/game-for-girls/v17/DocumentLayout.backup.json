@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\editor\\spriteassetlinker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\editor\\spriteassetlinker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|c:\\users\\korisnik\\onedrive\\desktop\\projects\\game-for-girls\\assets\\editor\\generatenecklacecolorstool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\editor\\generatenecklacecolorstool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\scripts\\ui\\portraituilayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\portraituilayout.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\scripts\\ui\\categorybarcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\categorybarcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GenerateNecklaceColorsTool.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\GenerateNecklaceColorsTool.cs",
+              "RelativeDocumentMoniker": "Assets\\Editor\\GenerateNecklaceColorsTool.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\GenerateNecklaceColorsTool.cs",
+              "RelativeToolTip": "Assets\\Editor\\GenerateNecklaceColorsTool.cs",
+              "ViewState": "AgIAALcAAAAAAAAAAAAxwK4AAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T10:15:46.863Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SpriteAssetLinker.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\SpriteAssetLinker.cs",
+              "RelativeDocumentMoniker": "Assets\\Editor\\SpriteAssetLinker.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\SpriteAssetLinker.cs",
+              "RelativeToolTip": "Assets\\Editor\\SpriteAssetLinker.cs",
+              "ViewState": "AgIAAC0CAAAAAAAAAAAwwDgCAABZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-25T05:57:28.329Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PortraitUILayout.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\PortraitUILayout.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\PortraitUILayout.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\PortraitUILayout.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\PortraitUILayout.cs",
+              "ViewState": "AgIAAMwAAAAAAAAAAAAwwNcAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T13:41:31.785Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CategoryBarController.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\CategoryBarController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\CategoryBarController.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\CategoryBarController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\CategoryBarController.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAwwEMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T11:16:34.693Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

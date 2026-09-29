@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14ed95dd36d041aaaa9942fd31916506, type: 3}
+  m_Name: BagColorLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.BagColorLibrary
+  colors:
+  - suffix: 01
+    color: {r: 0.95, g: 0.45, b: 0.65, a: 1}
+    displayName: Pink
+  - suffix: 02
+    color: {r: 0.85, g: 0.15, b: 0.2, a: 1}
+    displayName: Red
+  - suffix: 03
+    color: {r: 0.55, g: 0.25, b: 0.75, a: 1}
+    displayName: Purple
+  - suffix: 04
+    color: {r: 0.25, g: 0.45, b: 0.85, a: 1}
+    displayName: Blue
+  - suffix: 05
+    color: {r: 0.45, g: 0.85, b: 0.75, a: 1}
+    displayName: Mint
+  - suffix: 06
+    color: {r: 0.95, g: 0.85, b: 0.25, a: 1}
+    displayName: Yellow
+  - suffix: 07
+    color: {r: 0.15, g: 0.15, b: 0.18, a: 1}
+    displayName: Black
+  - suffix: 08
+    color: {r: 0.96, g: 0.92, b: 0.82, a: 1}
+    displayName: Cream
+  - suffix: 09
+    color: {r: 0.95, g: 0.5, b: 0.42, a: 1}
+    displayName: Coral
+  - suffix: 10
+    color: {r: 0.72, g: 0.58, b: 0.88, a: 1}
+    displayName: Lavender

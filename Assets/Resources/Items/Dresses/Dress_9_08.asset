@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55cdbce26ab324c4485c41ad9e97450a, type: 3}
+  m_Name: Dress_9_08
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.DressItem
+  id: dress_9_08
+  displayName: Dress 9 Mint
+  sprite: {fileID: 21300000, guid: 5810d9128a97450cb5e2585bd9b12664, type: 3}
+  tintColor: {r: 0.55, g: 0.92, b: 0.75, a: 1}
+  category: 2
+  layerOffset: {x: -0.0119, y: 0.269, z: 0}
+  layerScale: {x: 0.36951602, y: 0.36624047, z: 1.0598949}

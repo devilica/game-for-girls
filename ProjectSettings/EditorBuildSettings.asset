@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SplashScene.unity
+    guid: b9af071d1965e2543880579f1ad88cdd
+  - enabled: 1
+    path: Assets/Scenes/MenuScene.unity
+    guid: e3a7b2c91d4f4658a0b1c2d3e4f56789
+  - enabled: 1
+    path: Assets/Scenes/MainScene.unity
+    guid: 671cc7d4f32460e4e8bff93e1ddad97b
+  - enabled: 1
+    path: Assets/Scenes/PetScene.unity
+    guid: a1b2c3d4e5f6789012345678abcdef01
+  m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}

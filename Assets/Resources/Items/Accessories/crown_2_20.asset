@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08102772734f7b94c976e28427cca838, type: 3}
+  m_Name: crown_2_20
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.AccessoryItem
+  id: crown_2_20
+  displayName: Crown 2 Magenta Gem
+  sprite: {fileID: 21300000, guid: d54268ee47d851541b36e86be447a807, type: 3}
+  tintColor: {r: 0.82, g: 0.15, b: 0.55, a: 1}
+  category: 3
+  isNoneOption: 0
+  layerOffset: {x: -0.008, y: 2.906, z: 0}
+  layerScale: {x: 0.24370669, y: 0.1833684, z: 0.12}

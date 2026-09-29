@@ -1,0 +1,195 @@
+﻿%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7c3e8914f2d4b6e9d1a8c5b3e7f0421, type: 3}
+  m_Name: EyeColorLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.EyeColorLibrary
+  colors:
+  - id: eyes_2_02
+    color: {r: 0.56078431372549, g: 0.831372549019608, b: 0.941176470588235, a: 1}
+    displayName: Light Sky Blue
+  - id: eyes_2_03
+    color: {r: 0.145098039215686, g: 0.588235294117647, b: 0.745098039215686, a: 1}
+    displayName: Dark Sky Blue
+  - id: eyes_2_04
+    color: {r: 0.345098039215686, g: 0.682352941176471, b: 0.909803921568627, a: 1}
+    displayName: Light Ocean Blue
+  - id: eyes_2_05
+    color: {r: 0.0823529411764706, g: 0.407843137254902, b: 0.627450980392157, a: 1}
+    displayName: Dark Ocean Blue
+  - id: eyes_2_06
+    color: {r: 0.345098039215686, g: 0.87843137254902, b: 0.533333333333333, a: 1}
+    displayName: Light Emerald
+  - id: eyes_2_07
+    color: {r: 0.101960784313725, g: 0.596078431372549, b: 0.313725490196078, a: 1}
+    displayName: Dark Emerald
+  - id: eyes_2_08
+    color: {r: 0.282352941176471, g: 0.784313725490196, b: 0.376470588235294, a: 1}
+    displayName: Light Forest Green
+  - id: eyes_2_09
+    color: {r: 0.0823529411764706, g: 0.43921568627451, b: 0.188235294117647, a: 1}
+    displayName: Dark Forest Green
+  - id: eyes_2_10
+    color: {r: 0.494117647058824, g: 0.909803921568627, b: 0.470588235294118, a: 1}
+    displayName: Light Light Green
+  - id: eyes_2_11
+    color: {r: 0.219607843137255, g: 0.658823529411765, b: 0.219607843137255, a: 1}
+    displayName: Dark Light Green
+  - id: eyes_2_12
+    color: {r: 0.596078431372549, g: 0.941176470588235, b: 0.533333333333333, a: 1}
+    displayName: Light Spring Green
+  - id: eyes_2_13
+    color: {r: 0.282352941176471, g: 0.752941176470588, b: 0.250980392156863, a: 1}
+    displayName: Dark Spring Green
+  - id: eyes_2_14
+    color: {r: 1, g: 0.627450980392157, b: 0.250980392156863, a: 1}
+    displayName: Light Orange
+  - id: eyes_2_15
+    color: {r: 0.87843137254902, g: 0.407843137254902, b: 0.0941176470588235, a: 1}
+    displayName: Dark Orange
+  - id: eyes_2_16
+    color: {r: 1, g: 0.533333333333333, b: 0.188235294117647, a: 1}
+    displayName: Light Tangerine
+  - id: eyes_2_17
+    color: {r: 0.815686274509804, g: 0.282352941176471, b: 0.0627450980392157, a: 1}
+    displayName: Dark Tangerine
+  - id: eyes_2_18
+    color: {r: 0.941176470588235, g: 0.282352941176471, b: 0.282352941176471, a: 1}
+    displayName: Light Red
+  - id: eyes_2_19
+    color: {r: 0.752941176470588, g: 0.0941176470588235, b: 0.156862745098039, a: 1}
+    displayName: Dark Red
+  - id: eyes_2_20
+    color: {r: 0.941176470588235, g: 0.345098039215686, b: 0.407843137254902, a: 1}
+    displayName: Light Cherry
+  - id: eyes_2_21
+    color: {r: 0.690196078431373, g: 0.0941176470588235, b: 0.188235294117647, a: 1}
+    displayName: Dark Cherry
+  - id: eyes_2_22
+    color: {r: 0.909803921568627, g: 0.784313725490196, b: 0.407843137254902, a: 1}
+    displayName: Light Hazel Gold
+  - id: eyes_2_23
+    color: {r: 0.658823529411765, g: 0.501960784313725, b: 0.188235294117647, a: 1}
+    displayName: Dark Hazel Gold
+  - id: eyes_2_24
+    color: {r: 0.941176470588235, g: 0.72156862745098, b: 0.282352941176471, a: 1}
+    displayName: Light Honey Amber
+  - id: eyes_2_25
+    color: {r: 0.784313725490196, g: 0.501960784313725, b: 0.0941176470588235, a: 1}
+    displayName: Dark Honey Amber
+  - id: eyes_2_26
+    color: {r: 0.815686274509804, g: 0.627450980392157, b: 0.376470588235294, a: 1}
+    displayName: Light Warm Brown
+  - id: eyes_2_27
+    color: {r: 0.564705882352941, g: 0.376470588235294, b: 0.156862745098039, a: 1}
+    displayName: Dark Warm Brown
+  - id: eyes_2_28
+    color: {r: 0.72156862745098, g: 0.470588235294118, b: 0.282352941176471, a: 1}
+    displayName: Light Chocolate
+  - id: eyes_2_29
+    color: {r: 0.43921568627451, g: 0.250980392156863, b: 0.0941176470588235, a: 1}
+    displayName: Dark Chocolate
+  - id: eyes_2_30
+    color: {r: 0.72156862745098, g: 0.752941176470588, b: 0.784313725490196, a: 1}
+    displayName: Light Soft Grey
+  - id: eyes_2_31
+    color: {r: 0.407843137254902, g: 0.43921568627451, b: 0.470588235294118, a: 1}
+    displayName: Dark Soft Grey
+  - id: eyes_2_32
+    color: {r: 0.564705882352941, g: 0.596078431372549, b: 0.627450980392157, a: 1}
+    displayName: Light Storm Grey
+  - id: eyes_2_33
+    color: {r: 0.250980392156863, g: 0.282352941176471, b: 0.313725490196078, a: 1}
+    displayName: Dark Storm Grey
+  - id: eyes_2_34
+    color: {r: 0.752941176470588, g: 0.596078431372549, b: 0.941176470588235, a: 1}
+    displayName: Light Violet
+  - id: eyes_2_35
+    color: {r: 0.470588235294118, g: 0.282352941176471, b: 0.690196078431373, a: 1}
+    displayName: Dark Violet
+  - id: eyes_2_36
+    color: {r: 0.815686274509804, g: 0.690196078431373, b: 0.972549019607843, a: 1}
+    displayName: Light Lavender
+  - id: eyes_2_37
+    color: {r: 0.564705882352941, g: 0.407843137254902, b: 0.752941176470588, a: 1}
+    displayName: Dark Lavender
+  - id: eyes_2_38
+    color: {r: 0.941176470588235, g: 0.533333333333333, b: 0.658823529411765, a: 1}
+    displayName: Light Rose Pink
+  - id: eyes_2_39
+    color: {r: 0.752941176470588, g: 0.250980392156863, b: 0.407843137254902, a: 1}
+    displayName: Dark Rose Pink
+  - id: eyes_2_40
+    color: {r: 0.941176470588235, g: 0.407843137254902, b: 0.752941176470588, a: 1}
+    displayName: Light Magenta
+  - id: eyes_2_41
+    color: {r: 0.690196078431373, g: 0.156862745098039, b: 0.533333333333333, a: 1}
+    displayName: Dark Magenta
+  - id: eyes_2_42
+    color: {r: 0.250980392156863, g: 0.815686274509804, b: 0.784313725490196, a: 1}
+    displayName: Light Teal
+  - id: eyes_2_43
+    color: {r: 0.0941176470588235, g: 0.533333333333333, b: 0.501960784313725, a: 1}
+    displayName: Dark Teal
+  - id: eyes_2_44
+    color: {r: 0.219607843137255, g: 0.847058823529412, b: 0.909803921568627, a: 1}
+    displayName: Light Turquoise
+  - id: eyes_2_45
+    color: {r: 0.0627450980392157, g: 0.627450980392157, b: 0.690196078431373, a: 1}
+    displayName: Dark Turquoise
+  - id: eyes_2_46
+    color: {r: 0.470588235294118, g: 0.941176470588235, b: 0.658823529411765, a: 1}
+    displayName: Light Mint
+  - id: eyes_2_47
+    color: {r: 0.188235294117647, g: 0.690196078431373, b: 0.407843137254902, a: 1}
+    displayName: Dark Mint
+  - id: eyes_2_48
+    color: {r: 0.564705882352941, g: 0.972549019607843, b: 0.784313725490196, a: 1}
+    displayName: Light Seafoam
+  - id: eyes_2_49
+    color: {r: 0.250980392156863, g: 0.72156862745098, b: 0.533333333333333, a: 1}
+    displayName: Dark Seafoam
+  - id: eyes_2_50
+    color: {r: 0.345098039215686, g: 0.470588235294118, b: 0.72156862745098, a: 1}
+    displayName: Light Navy
+  - id: eyes_2_51
+    color: {r: 0.0941176470588235, g: 0.188235294117647, b: 0.345098039215686, a: 1}
+    displayName: Dark Navy
+  - id: eyes_2_52
+    color: {r: 0.784313725490196, g: 0.925490196078431, b: 1, a: 1}
+    displayName: Light Ice Blue
+  - id: eyes_2_53
+    color: {r: 0.533333333333333, g: 0.752941176470588, b: 0.87843137254902, a: 1}
+    displayName: Dark Ice Blue
+  - id: eyes_2_54
+    color: {r: 0.815686274509804, g: 0.470588235294118, b: 0.752941176470588, a: 1}
+    displayName: Light Plum
+  - id: eyes_2_55
+    color: {r: 0.564705882352941, g: 0.219607843137255, b: 0.407843137254902, a: 1}
+    displayName: Dark Plum
+  - id: eyes_2_56
+    color: {r: 0.941176470588235, g: 0.596078431372549, b: 0.313725490196078, a: 1}
+    displayName: Light Copper
+  - id: eyes_2_57
+    color: {r: 0.752941176470588, g: 0.345098039215686, b: 0.125490196078431, a: 1}
+    displayName: Dark Copper
+  - id: eyes_2_58
+    color: {r: 1, g: 0.87843137254902, b: 0.282352941176471, a: 1}
+    displayName: Light Golden
+  - id: eyes_2_59
+    color: {r: 0.87843137254902, g: 0.658823529411765, b: 0.0941176470588235, a: 1}
+    displayName: Dark Golden
+  - id: eyes_2_60
+    color: {r: 0.909803921568627, g: 0.219607843137255, b: 0.282352941176471, a: 1}
+    displayName: Light Ruby
+  - id: eyes_2_61
+    color: {r: 0.690196078431373, g: 0.0627450980392157, b: 0.125490196078431, a: 1}
+    displayName: Dark Ruby

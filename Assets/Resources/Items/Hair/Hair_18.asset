@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37377ec7a4f22f04aa19391f290021b0, type: 3}
+  m_Name: Hair_18
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.HairItem
+  id: hair_18
+  displayName: Hair 18
+  sprite: {fileID: 21300000, guid: 2bb59510adff4d478509c094b7df629f, type: 3}
+  category: 0
+  layerOffset: {x: -0.01, y: 1.4525, z: 0}
+  layerScale: {x: 0.6250141, y: 0.5255788, z: 0.69594}

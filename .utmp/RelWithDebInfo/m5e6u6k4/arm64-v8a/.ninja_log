@@ -1,0 +1,23 @@
+# ninja log v5
+26	1694	8121428894101065	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	d59d8fb56b73623e
+100	308	8121428880633486	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7a4696c01c4d2981
+308	557	8121428882796081	C:/Users/Korisnik/OneDrive/Desktop/Projects/game-for-girls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/m5e6u6k4/obj/arm64-v8a/libswappywrapper.so	909e7ed2d044727b
+48	1231	8121428889788949	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	745a5e000703bae8
+62	1272	8121428890228034	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	de64480019213ad4
+55	1301	8121428890517125	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	9109c4c06bada43b
+90	1675	8121428892014072	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	ba7f6079d39e6656
+81	1310	8121428890605633	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	623f013abf9faccf
+35	1333	8121428890818031	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	ac5a483576a886f7
+72	1696	8121428894090163	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	cddcb6d25c39da28
+1696	1823	8121428895705341	C:/Users/Korisnik/OneDrive/Desktop/Projects/game-for-girls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/m5e6u6k4/obj/arm64-v8a/libgame.so	ddf864f5fc9385a9
+127	999	8123106776489359	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7a4696c01c4d2981
+1000	1389	8123106780124242	C:/Users/Korisnik/OneDrive/Desktop/Projects/game-for-girls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/m5e6u6k4/obj/arm64-v8a/libswappywrapper.so	909e7ed2d044727b
+102	2532	8123106791778080	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	de64480019213ad4
+86	2576	8123106792241674	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	745a5e000703bae8
+76	2594	8123106792432176	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	9109c4c06bada43b
+116	2603	8123106792497942	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	623f013abf9faccf
+94	2648	8123106792949820	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	ac5a483576a886f7
+121	2709	8123106793554330	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	ba7f6079d39e6656
+109	2870	8123106795170256	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	cddcb6d25c39da28
+55	2979	8123106796226938	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	d59d8fb56b73623e
+2980	3135	8123106797690834	C:/Users/Korisnik/OneDrive/Desktop/Projects/game-for-girls/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/m5e6u6k4/obj/arm64-v8a/libgame.so	ddf864f5fc9385a9
