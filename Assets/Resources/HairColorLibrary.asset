@@ -1,0 +1,199 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed554d53e4e76f74b9eb9581b96f9cb8, type: 3}
+  m_Name: HairColorLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.HairColorLibrary
+  defaultPreset: 60
+  colors:
+  - preset: 60
+    color: {r: 1, g: 1, b: 1, a: 1}
+    displayName: Original
+  - preset: 0
+    color: {r: 0.12, g: 0.12, b: 0.12, a: 1}
+    displayName: Black
+  - preset: 1
+    color: {r: 0.45, g: 0.28, b: 0.16, a: 1}
+    displayName: Brown
+  - preset: 2
+    color: {r: 0.28, g: 0.16, b: 0.08, a: 1}
+    displayName: Dark Brown
+  - preset: 3
+    color: {r: 0.95, g: 0.82, b: 0.45, a: 1}
+    displayName: Blonde
+  - preset: 4
+    color: {r: 0.75, g: 0.18, b: 0.12, a: 1}
+    displayName: Red
+  - preset: 5
+    color: {r: 0.95, g: 0.45, b: 0.65, a: 1}
+    displayName: Pink
+  - preset: 6
+    color: {r: 0.55, g: 0.25, b: 0.75, a: 1}
+    displayName: Purple
+  - preset: 7
+    color: {r: 0.22, g: 0.22, b: 0.24, a: 1}
+    displayName: Dark Grey
+  - preset: 8
+    color: {r: 0.45, g: 0.45, b: 0.48, a: 1}
+    displayName: Grey
+  - preset: 9
+    color: {r: 0.72, g: 0.72, b: 0.76, a: 1}
+    displayName: Silver
+  - preset: 10
+    color: {r: 0.88, g: 0.86, b: 0.82, a: 1}
+    displayName: Platinum
+  - preset: 11
+    color: {r: 0.55, g: 0.28, b: 0.14, a: 1}
+    displayName: Chestnut
+  - preset: 12
+    color: {r: 0.62, g: 0.22, b: 0.12, a: 1}
+    displayName: Auburn
+  - preset: 13
+    color: {r: 0.92, g: 0.72, b: 0.28, a: 1}
+    displayName: Golden Blonde
+  - preset: 14
+    color: {r: 0.92, g: 0.58, b: 0.38, a: 1}
+    displayName: Strawberry Blonde
+  - preset: 15
+    color: {r: 0.48, g: 0.08, b: 0.18, a: 1}
+    displayName: Burgundy
+  - preset: 16
+    color: {r: 0.82, g: 0.42, b: 0.18, a: 1}
+    displayName: Copper
+  - preset: 17
+    color: {r: 0.92, g: 0.48, b: 0.12, a: 1}
+    displayName: Orange
+  - preset: 18
+    color: {r: 0.98, g: 0.68, b: 0.48, a: 1}
+    displayName: Peach
+  - preset: 19
+    color: {r: 0.18, g: 0.42, b: 0.22, a: 1}
+    displayName: Forest Green
+  - preset: 20
+    color: {r: 0.42, g: 0.48, b: 0.22, a: 1}
+    displayName: Olive Green
+  - preset: 21
+    color: {r: 0.55, g: 0.88, b: 0.72, a: 1}
+    displayName: Mint Green
+  - preset: 22
+    color: {r: 0.12, g: 0.72, b: 0.48, a: 1}
+    displayName: Emerald Green
+  - preset: 23
+    color: {r: 0.12, g: 0.18, b: 0.42, a: 1}
+    displayName: Navy Blue
+  - preset: 24
+    color: {r: 0.18, g: 0.38, b: 0.82, a: 1}
+    displayName: Royal Blue
+  - preset: 25
+    color: {r: 0.45, g: 0.72, b: 0.95, a: 1}
+    displayName: Sky Blue
+  - preset: 26
+    color: {r: 0.12, g: 0.58, b: 0.62, a: 1}
+    displayName: Teal
+  - preset: 27
+    color: {r: 0.72, g: 0.58, b: 0.92, a: 1}
+    displayName: Lavender
+  - preset: 28
+    color: {r: 0.82, g: 0.18, b: 0.58, a: 1}
+    displayName: Magenta
+  - preset: 29
+    color: {r: 0.88, g: 0.58, b: 0.52, a: 1}
+    displayName: Rose Gold
+  - preset: 30
+    color: {r: 0.98, g: 0.98, b: 0.96, a: 1}
+    displayName: White
+  - preset: 31
+    color: {r: 0.94, g: 0.92, b: 0.88, a: 1}
+    displayName: Off White
+  - preset: 32
+    color: {r: 0.96, g: 0.94, b: 0.86, a: 1}
+    displayName: Ivory
+  - preset: 33
+    color: {r: 0.98, g: 0.95, b: 0.82, a: 1}
+    displayName: Cream
+  - preset: 34
+    color: {r: 0.98, g: 0.95, b: 0.62, a: 1}
+    displayName: Light Yellow
+  - preset: 35
+    color: {r: 0.98, g: 0.92, b: 0.38, a: 1}
+    displayName: Lemon
+  - preset: 36
+    color: {r: 0.95, g: 0.88, b: 0.22, a: 1}
+    displayName: Canary
+  - preset: 37
+    color: {r: 0.98, g: 0.9, b: 0.55, a: 1}
+    displayName: Butter
+  - preset: 38
+    color: {r: 0.95, g: 0.88, b: 0.72, a: 1}
+    displayName: Champagne
+  - preset: 39
+    color: {r: 0.92, g: 0.78, b: 0.38, a: 1}
+    displayName: Honey
+  - preset: 40
+    color: {r: 0.88, g: 0.78, b: 0.62, a: 1}
+    displayName: Sand
+  - preset: 41
+    color: {r: 0.82, g: 0.72, b: 0.58, a: 1}
+    displayName: Beige
+  - preset: 42
+    color: {r: 0.98, g: 0.82, b: 0.88, a: 1}
+    displayName: Pastel Pink
+  - preset: 43
+    color: {r: 0.98, g: 0.78, b: 0.85, a: 1}
+    displayName: Baby Pink
+  - preset: 44
+    color: {r: 0.95, g: 0.72, b: 0.92, a: 1}
+    displayName: Cotton Candy
+  - preset: 45
+    color: {r: 0.78, g: 0.88, b: 0.98, a: 1}
+    displayName: Pastel Blue
+  - preset: 46
+    color: {r: 0.72, g: 0.85, b: 0.98, a: 1}
+    displayName: Baby Blue
+  - preset: 47
+    color: {r: 0.82, g: 0.92, b: 0.98, a: 1}
+    displayName: Powder Blue
+  - preset: 48
+    color: {r: 0.78, g: 0.95, b: 0.82, a: 1}
+    displayName: Pastel Green
+  - preset: 49
+    color: {r: 0.72, g: 0.82, b: 0.68, a: 1}
+    displayName: Sage Green
+  - preset: 50
+    color: {r: 0.85, g: 0.72, b: 0.95, a: 1}
+    displayName: Pastel Purple
+  - preset: 51
+    color: {r: 0.88, g: 0.78, b: 0.95, a: 1}
+    displayName: Lilac
+  - preset: 52
+    color: {r: 0.98, g: 0.82, b: 0.62, a: 1}
+    displayName: Pastel Orange
+  - preset: 53
+    color: {r: 0.98, g: 0.78, b: 0.58, a: 1}
+    displayName: Apricot
+  - preset: 54
+    color: {r: 0.98, g: 0.65, b: 0.58, a: 1}
+    displayName: Coral
+  - preset: 55
+    color: {r: 0.98, g: 0.72, b: 0.68, a: 1}
+    displayName: Light Coral
+  - preset: 56
+    color: {r: 0.85, g: 0.92, b: 0.98, a: 1}
+    displayName: Ice Blue
+  - preset: 57
+    color: {r: 0.92, g: 0.9, b: 0.88, a: 1}
+    displayName: Pearl
+  - preset: 58
+    color: {r: 0.95, g: 0.82, b: 0.85, a: 1}
+    displayName: Rose Quartz
+  - preset: 59
+    color: {r: 0.95, g: 0.88, b: 0.55, a: 1}
+    displayName: Soft Gold

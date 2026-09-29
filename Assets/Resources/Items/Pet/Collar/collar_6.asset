@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 668036747154d4f4eb483d94d4c08b33, type: 3}
+  m_Name: collar_6
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Pet.PetItem
+  id: collar_6
+  displayName: Collar 6
+  sprite: {fileID: 21300000, guid: f40d9b827b6e4e84c89fd7eafaba039c, type: 3}
+  tintColor: {r: 1, g: 1, b: 1, a: 1}
+  category: 2
+  isNoneOption: 0
+  layerOffset: {x: 0, y: 0, z: 0}
+  layerScale: {x: 1, y: 1, z: 1}
+  perPetLayouts:
+  - petId: pet_1
+    layerOffset: {x: 0.01, y: -0.27, z: 0}
+    layerScale: {x: 0.25754, y: 0.25754, z: 0.25754}
+  - petId: pet_2
+    layerOffset: {x: -0.1, y: -0.8, z: 0}
+    layerScale: {x: 0.29330873, y: 0.29330873, z: 0.29330873}
+  - petId: pet_3
+    layerOffset: {x: -0.057, y: -0.21, z: 0}
+    layerScale: {x: 0.19695194, y: 0.19695194, z: 0.19695194}
+  - petId: pet_1_yellow
+    layerOffset: {x: 0.01, y: -0.27, z: 0}
+    layerScale: {x: 0.25754, y: 0.25754, z: 0.25754}
+  - petId: pet_1_brown
+    layerOffset: {x: 0.01, y: -0.27, z: 0}
+    layerScale: {x: 0.25754, y: 0.25754, z: 0.25754}
+  - petId: pet_1_orange
+    layerOffset: {x: 0.01, y: -0.27, z: 0}
+    layerScale: {x: 0.25754, y: 0.25754, z: 0.25754}
+  - petId: pet_1_grey
+    layerOffset: {x: 0.01, y: -0.27, z: 0}
+    layerScale: {x: 0.25754, y: 0.25754, z: 0.25754}
+  - petId: pet_2_yellow
+    layerOffset: {x: -0.1, y: -0.8, z: 0}
+    layerScale: {x: 0.29330873, y: 0.29330873, z: 0.29330873}
+  - petId: pet_2_brown
+    layerOffset: {x: -0.1, y: -0.8, z: 0}
+    layerScale: {x: 0.29330873, y: 0.29330873, z: 0.29330873}
+  - petId: pet_2_orange
+    layerOffset: {x: -0.1, y: -0.8, z: 0}
+    layerScale: {x: 0.29330873, y: 0.29330873, z: 0.29330873}
+  - petId: pet_2_grey
+    layerOffset: {x: -0.1, y: -0.8, z: 0}
+    layerScale: {x: 0.29330873, y: 0.29330873, z: 0.29330873}
+  - petId: pet_3_yellow
+    layerOffset: {x: -0.057, y: -0.21, z: 0}
+    layerScale: {x: 0.19695194, y: 0.19695194, z: 0.19695194}
+  - petId: pet_3_brown
+    layerOffset: {x: -0.057, y: -0.21, z: 0}
+    layerScale: {x: 0.19695194, y: 0.19695194, z: 0.19695194}
+  - petId: pet_3_orange
+    layerOffset: {x: -0.057, y: -0.21, z: 0}
+    layerScale: {x: 0.19695194, y: 0.19695194, z: 0.19695194}
+  - petId: pet_3_grey
+    layerOffset: {x: -0.057, y: -0.21, z: 0}
+    layerScale: {x: 0.19695194, y: 0.19695194, z: 0.19695194}
+  hairbowLayerAnchorOffset: {x: 0, y: 0, z: 0}
+  collarLayerAnchorOffset: {x: 0, y: 0, z: 0}
+  glassesLayerAnchorOffset: {x: 0, y: 0, z: 0}

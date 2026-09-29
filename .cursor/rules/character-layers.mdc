@@ -1,0 +1,39 @@
+---
+description: Checklist when adding new Girl character layers (Crown, Glasses, etc.)
+globs: Assets/Scripts/Character/**,Assets/Editor/**,Assets/Scenes/MainScene.unity
+alwaysApply: true
+---
+
+# Character layer checklist
+
+When adding a **new customizable layer** under `Girl` (sprite renderer + items + wizard step):
+
+## Scene & rendering
+
+1. Add a child GameObject under `Girl` in `Assets/Scenes/MainScene.unity` (same pattern as `Crown` / `Glasses`).
+2. Wire the `SpriteRenderer` on `CharacterCustomizer` (new serialized field if needed).
+3. Add the layer to `CharacterLayerLayout.layerAnchors`.
+4. Set `sortingOrder` in `CharacterCustomizer.ApplySortingOrders()`.
+5. Update `GameSceneBuilder.CreateGirlCharacter()` for future scene rebuilds.
+6. Tell the user to run **Dress Up Game → Reload Main Scene** so the new hierarchy appears in the Editor.
+
+## Data & save position
+
+7. Create item ScriptableObjects (and generator tool if many variants).
+8. Update `GameCatalog` and any wizard/edit UI grids.
+9. Add **Dress Up Game → Save {Layer} Position To {Item}** in `SaveLayerPositionTool.cs` (mirror Hair/Crown/Glasses pattern).
+10. Include the layer in **Reset Layer Positions** and any offset-reset helpers.
+
+## Wizard (if applicable)
+
+11. Add a `WizardStep`, grid show method, and handler in `OpeningWizardController`.
+12. Include a **None** option when the category supports skipping.
+
+## Menu items to add every time
+
+| Purpose | Menu path |
+|---------|-----------|
+| Save layout from Scene view | `Dress Up Game/Save {Layer} Position To {Item}` |
+| Refresh hierarchy after scene edits | `Dress Up Game/Reload Main Scene` |
+
+Never rely on runtime-only `new GameObject()` for layers the user must position in the Editor — persist them in `MainScene.unity`.

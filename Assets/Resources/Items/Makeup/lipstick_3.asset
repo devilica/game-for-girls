@@ -1,0 +1,22 @@
+﻿%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 574b7066a73413d48b048ab522b6ed09, type: 3}
+  m_Name: lipstick_3
+  m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.MakeupItem
+  id: lipstick_3
+  displayName: Lipstick 3
+  sprite: {fileID: 21300000, guid: 9e8df85f9b1c4da478469f7354006910, type: 3}
+  makeupType: 0
+  tintColor: {r: 0.88600004, g: 0.392, b: 0.506, a: 1}
+  isNoneOption: 0
+  layerOffset: {x: -0.01, y: 1.689, z: 0}
+  layerScale: {x: 0.110507615, y: 0.110507615, z: 0.110507615}
