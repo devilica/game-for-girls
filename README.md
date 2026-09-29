@@ -75,4 +75,12 @@ Assets/
 
 ## License
 
-Private project — add license terms here if you publish or share the repo.
+**Proprietary — all rights reserved.** See [LICENSE](LICENSE).
+
+You may not copy, modify, distribute, or use this project without **written
+permission** from the copyright holder. Replace the placeholder name and
+contact in `LICENSE` with your legal name or company before publishing the
+repo or sharing the project.
+
+**Keep secrets out of git:** signing keys live under `Keystore/` (gitignored).
+Never commit passwords, `.keystore` files, or credential notes.
