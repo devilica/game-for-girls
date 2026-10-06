@@ -1,4 +1,5 @@
 using DressUpGame.Character;
+using DressUpGame.Memory;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -30,8 +31,8 @@ namespace DressUpGame.UI
 
         private void Awake()
         {
-            BackgroundMusicController.EnsureExists();
             EnsureAudioListenerExists();
+            BackgroundMusicController.EnsureExists();
 
             if (IsNonGameplayScene())
             {
@@ -61,18 +62,36 @@ namespace DressUpGame.UI
             return sceneName == SplashSceneName || sceneName == MenuSceneName;
         }
 
-        private static void EnsureAudioListenerExists()
+        public static void EnsureAudioListenerForActiveScene()
         {
-            if (Object.FindAnyObjectByType<AudioListener>() != null)
+            AudioListener existingListener = Object.FindAnyObjectByType<AudioListener>();
+            if (existingListener != null && existingListener.enabled)
             {
                 return;
             }
 
             Camera camera = Camera.main ?? Object.FindAnyObjectByType<Camera>();
-            if (camera != null)
+            if (camera == null)
+            {
+                GameObject cameraGo = new GameObject("Main Camera");
+                camera = cameraGo.AddComponent<Camera>();
+                cameraGo.tag = "MainCamera";
+                camera.orthographic = true;
+                camera.orthographicSize = 6f;
+                camera.transform.position = new Vector3(0f, 0f, -10f);
+                camera.backgroundColor = new Color(0.98f, 0.92f, 0.96f);
+                camera.clearFlags = CameraClearFlags.SolidColor;
+            }
+
+            if (camera.GetComponent<AudioListener>() == null)
             {
                 camera.gameObject.AddComponent<AudioListener>();
             }
+        }
+
+        private static void EnsureAudioListenerExists()
+        {
+            EnsureAudioListenerForActiveScene();
         }
 
         private void ConfigureCamera()
@@ -102,6 +121,11 @@ namespace DressUpGame.UI
 
         private void ConfigureUILayout()
         {
+            if (SceneManager.GetActiveScene().name == MemoryGameController.MemorySceneName)
+            {
+                return;
+            }
+
             PortraitUILayout layout = FindAnyObjectByType<PortraitUILayout>();
             if (layout == null)
             {

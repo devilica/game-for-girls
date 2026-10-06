@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: pet_1_brown
   m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Pet.PetItem
   id: pet_1_brown
-  displayName: Pet 1 (Brown)
-  sprite: {fileID: 21300000, guid: 2df2683bfc2df654a9b86a05c3749b00, type: 3}
-  tintColor: {r: 0.72, g: 0.52, b: 0.38, a: 1}
+  displayName: Pet 1 Brown
+  sprite: {fileID: 21300000, guid: 8471bdeef6157e44fa53ae5f59a44c8f, type: 3}
+  tintColor: {r: 1, g: 1, b: 1, a: 1}
   category: 0
   isNoneOption: 0
   layerOffset: {x: 0, y: 0, z: 0}

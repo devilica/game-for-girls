@@ -3,11 +3,23 @@
   "WorkspaceRootPath": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|c:\\users\\korisnik\\onedrive\\desktop\\projects\\game-for-girls\\assets\\editor\\androidplaystorebuildsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\editor\\androidplaystorebuildsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\editor\\generatepetrecolorvariantstool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\editor\\generatepetrecolorvariantstool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\scripts\\ui\\mobileadsinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\mobileadsinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\editor\\spriteassetlinker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\editor\\spriteassetlinker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|c:\\users\\korisnik\\onedrive\\desktop\\projects\\game-for-girls\\assets\\editor\\generatenecklacecolorstool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\editor\\generatenecklacecolorstool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\editor\\generatenecklacecolorstool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -26,11 +38,48 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AndroidPlayStoreBuildSettings.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\AndroidPlayStoreBuildSettings.cs",
+              "RelativeDocumentMoniker": "Assets\\Editor\\AndroidPlayStoreBuildSettings.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\AndroidPlayStoreBuildSettings.cs",
+              "RelativeToolTip": "Assets\\Editor\\AndroidPlayStoreBuildSettings.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAwwDoAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-29T10:07:46.845Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "GeneratePetRecolorVariantsTool.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\GeneratePetRecolorVariantsTool.cs",
+              "RelativeDocumentMoniker": "Assets\\Editor\\GeneratePetRecolorVariantsTool.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\GeneratePetRecolorVariantsTool.cs",
+              "RelativeToolTip": "Assets\\Editor\\GeneratePetRecolorVariantsTool.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-29T09:02:39.245Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MobileAdsInitializer.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\MobileAdsInitializer.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\MobileAdsInitializer.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\MobileAdsInitializer.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\MobileAdsInitializer.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAwwCgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T13:46:58.311Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "GenerateNecklaceColorsTool.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\GenerateNecklaceColorsTool.cs",
               "RelativeDocumentMoniker": "Assets\\Editor\\GenerateNecklaceColorsTool.cs",
@@ -38,12 +87,11 @@
               "RelativeToolTip": "Assets\\Editor\\GenerateNecklaceColorsTool.cs",
               "ViewState": "AgIAALcAAAAAAAAAAAAxwK4AAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-28T10:15:46.863Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-28T10:15:46.863Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "SpriteAssetLinker.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\SpriteAssetLinker.cs",
               "RelativeDocumentMoniker": "Assets\\Editor\\SpriteAssetLinker.cs",
@@ -51,12 +99,11 @@
               "RelativeToolTip": "Assets\\Editor\\SpriteAssetLinker.cs",
               "ViewState": "AgIAAC0CAAAAAAAAAAAwwDgCAABZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-25T05:57:28.329Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-25T05:57:28.329Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "PortraitUILayout.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\PortraitUILayout.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\PortraitUILayout.cs",
@@ -68,7 +115,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "CategoryBarController.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\CategoryBarController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\CategoryBarController.cs",

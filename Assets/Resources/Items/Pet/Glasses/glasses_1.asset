@@ -30,42 +30,7 @@ MonoBehaviour:
   - petId: pet_3
     layerOffset: {x: -0, y: 1.214, z: 0}
     layerScale: {x: 0.39896, y: 0.39896, z: 0.39896}
-  - petId: pet_1_yellow
-    layerOffset: {x: 0.05, y: 1.36, z: 0}
-    layerScale: {x: 0.40346822, y: 0.40346822, z: 0.40346822}
-  - petId: pet_1_brown
-    layerOffset: {x: 0.05, y: 1.36, z: 0}
-    layerScale: {x: 0.40346822, y: 0.40346822, z: 0.40346822}
-  - petId: pet_1_orange
-    layerOffset: {x: 0.05, y: 1.36, z: 0}
-    layerScale: {x: 0.40346822, y: 0.40346822, z: 0.40346822}
-  - petId: pet_1_grey
-    layerOffset: {x: 0.05, y: 1.36, z: 0}
-    layerScale: {x: 0.40346822, y: 0.40346822, z: 0.40346822}
-  - petId: pet_2_yellow
-    layerOffset: {x: -0.02, y: 0.9, z: 0}
-    layerScale: {x: 0.43534186, y: 0.43534186, z: 0.43534186}
-  - petId: pet_2_brown
-    layerOffset: {x: -0.02, y: 0.9, z: 0}
-    layerScale: {x: 0.43534186, y: 0.43534186, z: 0.43534186}
-  - petId: pet_2_orange
-    layerOffset: {x: -0.02, y: 0.9, z: 0}
-    layerScale: {x: 0.43534186, y: 0.43534186, z: 0.43534186}
-  - petId: pet_2_grey
-    layerOffset: {x: -0.02, y: 0.9, z: 0}
-    layerScale: {x: 0.43534186, y: 0.43534186, z: 0.43534186}
-  - petId: pet_3_yellow
-    layerOffset: {x: -0, y: 1.214, z: 0}
-    layerScale: {x: 0.39896, y: 0.39896, z: 0.39896}
-  - petId: pet_3_brown
-    layerOffset: {x: -0, y: 1.214, z: 0}
-    layerScale: {x: 0.39896, y: 0.39896, z: 0.39896}
-  - petId: pet_3_orange
-    layerOffset: {x: -0, y: 1.214, z: 0}
-    layerScale: {x: 0.39896, y: 0.39896, z: 0.39896}
-  - petId: pet_3_grey
-    layerOffset: {x: -0, y: 1.214, z: 0}
-    layerScale: {x: 0.39896, y: 0.39896, z: 0.39896}
   hairbowLayerAnchorOffset: {x: 0, y: 0, z: 0}
   collarLayerAnchorOffset: {x: 0, y: 0, z: 0}
   glassesLayerAnchorOffset: {x: 0, y: 0, z: 0}
+  layoutBasePetId: 

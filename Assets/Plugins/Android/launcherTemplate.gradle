@@ -5,6 +5,12 @@ apply from: '../shared/common.gradle'
 
 dependencies {
     implementation project(':unityLibrary')
+    implementation 'com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.4.0'
+}
+
+configurations.configureEach {
+    exclude group: 'com.google.android.gms', module: 'play-services-ads'
+    exclude group: 'com.google.android.gms', module: 'play-services-ads-lite'
 }
 
 android {
@@ -44,12 +50,12 @@ android {
         debug {
             debuggable false
             minifyEnabled **MINIFY_DEBUG**
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')**SIGNCONFIG**
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-user.txt'**SIGNCONFIG**
         }
         release {
             debuggable false
             minifyEnabled **MINIFY_RELEASE**
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')**SIGNCONFIG**
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-user.txt'**SIGNCONFIG**
         }
     }**PACKAGING****PLAY_ASSET_PACKS****SPLITS**
 **BUILT_APK_LOCATION**

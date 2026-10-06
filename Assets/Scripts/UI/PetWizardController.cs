@@ -34,6 +34,10 @@ namespace DressUpGame.UI
         public event Action WizardCompleted;
         public event Action<PetItem> ItemApplied;
 
+        public bool IsWizardVisible => wizardPanel != null && wizardPanel.activeSelf;
+        public bool IsEditMode => isEditMode;
+        public bool IsAtFirstWizardStep => currentStep == PetWizardStep.Pet;
+
         private void Awake()
         {
             if (customizer == null)
@@ -186,15 +190,27 @@ namespace DressUpGame.UI
             UpdateNavigation();
         }
 
-        private void GoToPreviousStep()
+        public bool TryGoToPreviousStep()
         {
-            if (isTransitioning || currentStep == PetWizardStep.Pet)
+            if (!IsWizardVisible || isTransitioning || currentStep == PetWizardStep.Pet)
             {
-                return;
+                return false;
             }
 
             currentStep--;
             ShowStep(currentStep);
+            return true;
+        }
+
+        public void ExitEditModeToDoneView()
+        {
+            isEditMode = false;
+            HideWizard();
+        }
+
+        private void GoToPreviousStep()
+        {
+            TryGoToPreviousStep();
         }
 
         private void GoToNextStep()
@@ -223,14 +239,10 @@ namespace DressUpGame.UI
                 {
                     if (currentStep == PetWizardStep.Glasses)
                     {
+                        yield return ShowTeaBreakRoutine();
                         isEditMode = false;
                         WizardCompleted?.Invoke();
                         yield break;
-                    }
-
-                    if (currentStep == PetWizardStep.Collar)
-                    {
-                        yield return ShowTeaBreakRoutine();
                     }
 
                     currentStep++;
@@ -240,13 +252,9 @@ namespace DressUpGame.UI
 
                 if (currentStep == PetWizardStep.Glasses)
                 {
+                    yield return ShowTeaBreakRoutine();
                     WizardCompleted?.Invoke();
                     yield break;
-                }
-
-                if (currentStep == PetWizardStep.Collar)
-                {
-                    yield return ShowTeaBreakRoutine();
                 }
 
                 currentStep++;

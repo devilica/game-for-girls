@@ -4,23 +4,31 @@ using UnityEngine.UI;
 namespace DressUpGame.UI
 {
     /// <summary>
-    /// Sweet pink native-ad frame shown at the bottom of the tea break overlay.
+    /// Sweet pink native-ad frame for tea break overlay and memory game screen.
     /// </summary>
     public class BreakNativeAdSlotView : MonoBehaviour
     {
         public const string SlotObjectName = "BreakNativeAdSlot";
+        public const string MemorySlotObjectName = "MemoryNativeAdSlot";
         public const float SlotHeightReferenceUnits = 220f;
+        public const float MemorySlotHeightReferenceUnits = 200f;
+        public const float MemorySlotBottomPaddingReferenceUnits = 8f;
+
         private const float SlotBottomPaddingReferenceUnits = 8f;
 
         private static readonly Color SweetPanelColor = new Color(1f, 0.94f, 0.98f, 1f);
         private static readonly Color SweetAccentColor = new Color(1f, 0.55f, 0.72f, 1f);
         private static readonly Color SweetHeaderColor = new Color(0.72f, 0.28f, 0.52f, 1f);
         private static readonly Color SweetBodyColor = new Color(0.58f, 0.38f, 0.52f, 1f);
+        private static readonly Color MemoryCardBackColor = new Color(1f, 0.94f, 0.97f, 1f);
+        private static readonly Color MemoryContentFillColor = new Color(1f, 0.98f, 1f, 0.92f);
 
         [SerializeField] private RectTransform slotRect;
+        [SerializeField] private RectTransform contentRect;
         [SerializeField] private GameObject editorPlaceholder;
 
         public RectTransform SlotRect => slotRect;
+        public RectTransform ContentRect => contentRect;
 
         public static BreakNativeAdSlotView EnsureOnOverlay(Transform overlayRoot)
         {
@@ -29,7 +37,22 @@ namespace DressUpGame.UI
                 return null;
             }
 
-            Transform existing = overlayRoot.Find(SlotObjectName);
+            return EnsureSlot(overlayRoot, SlotObjectName, useMemoryCardChrome: false);
+        }
+
+        public static BreakNativeAdSlotView EnsureForMemory(Transform canvasRoot)
+        {
+            if (canvasRoot == null)
+            {
+                return null;
+            }
+
+            return EnsureSlot(canvasRoot, MemorySlotObjectName, useMemoryCardChrome: true);
+        }
+
+        private static BreakNativeAdSlotView EnsureSlot(Transform parent, string objectName, bool useMemoryCardChrome)
+        {
+            Transform existing = parent.Find(objectName);
             if (existing != null)
             {
                 BreakNativeAdSlotView view = existing.GetComponent<BreakNativeAdSlotView>();
@@ -42,56 +65,8 @@ namespace DressUpGame.UI
                 return view;
             }
 
-            GameObject slotGo = new GameObject(SlotObjectName);
-            slotGo.transform.SetParent(overlayRoot, false);
-
-            RectTransform rect = slotGo.AddComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0f, 0f);
-            rect.anchorMax = new Vector2(1f, 0f);
-            rect.pivot = new Vector2(0.5f, 0f);
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = new Vector2(0f, SlotHeightReferenceUnits);
-
-            Image panelImage = slotGo.AddComponent<Image>();
-            panelImage.color = SweetPanelColor;
-            panelImage.raycastTarget = false;
-            ConfigureDevicePanelVisual(panelImage);
-
-            GameObject headerGo = new GameObject("Header");
-            headerGo.transform.SetParent(slotGo.transform, false);
-            RectTransform headerRect = headerGo.AddComponent<RectTransform>();
-            headerRect.anchorMin = new Vector2(0f, 1f);
-            headerRect.anchorMax = new Vector2(1f, 1f);
-            headerRect.pivot = new Vector2(0.5f, 1f);
-            headerRect.offsetMin = new Vector2(16f, -52f);
-            headerRect.offsetMax = new Vector2(-16f, -8f);
-
-            Text headerText = headerGo.AddComponent<Text>();
-            headerText.text = "Sponsored";
-            headerText.alignment = TextAnchor.MiddleCenter;
-            headerText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            headerText.fontSize = 26;
-            headerText.fontStyle = FontStyle.Bold;
-            headerText.color = SweetHeaderColor;
-            headerText.raycastTarget = false;
-
-            GameObject contentGo = new GameObject("AdContentArea");
-            contentGo.transform.SetParent(slotGo.transform, false);
-            RectTransform contentRect = contentGo.AddComponent<RectTransform>();
-            contentRect.anchorMin = Vector2.zero;
-            contentRect.anchorMax = Vector2.one;
-            contentRect.offsetMin = new Vector2(12f, 12f);
-            contentRect.offsetMax = new Vector2(-12f, -56f);
-
-            Image contentBg = contentGo.AddComponent<Image>();
-            contentBg.color = new Color(1f, 0.98f, 1f, 0.92f);
-            contentBg.raycastTarget = false;
-
-            GameObject editorPlaceholderGo = BuildEditorPlaceholder(contentGo.transform);
-
-            BreakNativeAdSlotView created = slotGo.AddComponent<BreakNativeAdSlotView>();
-            created.slotRect = rect;
-            created.editorPlaceholder = editorPlaceholderGo;
+            GameObject slotGo = CreateSlotHierarchy(parent, objectName, useMemoryCardChrome);
+            BreakNativeAdSlotView created = slotGo.GetComponent<BreakNativeAdSlotView>();
             slotGo.SetActive(false);
             return created;
         }
@@ -107,6 +82,20 @@ namespace DressUpGame.UI
             float slotBottom = bannerInset + SlotBottomPaddingReferenceUnits;
             slotRect.offsetMin = new Vector2(0f, slotBottom);
             slotRect.offsetMax = new Vector2(0f, slotBottom + SlotHeightReferenceUnits);
+            ApplyDeviceChromeVisibility();
+        }
+
+        public void ApplyMemoryLayout(float horizontalPaddingReference)
+        {
+            if (slotRect == null)
+            {
+                return;
+            }
+
+            float bannerInset = BottomBannerAdController.LayoutInsetReferenceUnits;
+            float slotBottom = bannerInset + MemorySlotBottomPaddingReferenceUnits;
+            slotRect.offsetMin = new Vector2(horizontalPaddingReference, slotBottom);
+            slotRect.offsetMax = new Vector2(-horizontalPaddingReference, slotBottom + MemorySlotHeightReferenceUnits);
             ApplyDeviceChromeVisibility();
         }
 
@@ -133,11 +122,120 @@ namespace DressUpGame.UI
 #endif
         }
 
+        /// <summary>
+        /// Keeps the slot active for overlay positioning without showing Sponsored chrome or placeholders.
+        /// </summary>
+        public void PrepareHiddenForAdRender()
+        {
+            gameObject.SetActive(true);
+            SetSponsoredChromeVisible(false);
+            ApplyDeviceChromeVisibility();
+            transform.SetAsLastSibling();
+        }
+
+        public void HideSlotCompletely()
+        {
+            SetSponsoredChromeVisible(true);
+            SetVisible(false);
+        }
+
+        private void SetSponsoredChromeVisible(bool visible)
+        {
+            Transform header = transform.Find("Header");
+            if (header != null)
+            {
+                header.gameObject.SetActive(visible);
+            }
+
+            if (editorPlaceholder != null)
+            {
+                editorPlaceholder.SetActive(false);
+            }
+        }
+
         private void BindReferences(Transform root)
         {
             slotRect = root.GetComponent<RectTransform>();
+            Transform content = root.Find("AdContentArea");
+            contentRect = content != null ? content.GetComponent<RectTransform>() : null;
             editorPlaceholder = root.Find("AdContentArea/EditorPlaceholder")?.gameObject;
             ConfigureDevicePanelVisual(root.GetComponent<Image>());
+        }
+
+        private static GameObject CreateSlotHierarchy(Transform parent, string objectName, bool useMemoryCardChrome)
+        {
+            GameObject slotGo = new GameObject(objectName);
+            slotGo.transform.SetParent(parent, false);
+
+            RectTransform rect = slotGo.AddComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(0.5f, 0f);
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = new Vector2(0f, useMemoryCardChrome ? MemorySlotHeightReferenceUnits : SlotHeightReferenceUnits);
+
+            Image panelImage = slotGo.AddComponent<Image>();
+            if (useMemoryCardChrome)
+            {
+                panelImage.sprite = UiRoundSpriteUtility.GetRoundedSquareSprite();
+                panelImage.type = Image.Type.Sliced;
+                panelImage.color = MemoryCardBackColor;
+            }
+            else
+            {
+                panelImage.color = SweetPanelColor;
+            }
+
+            panelImage.raycastTarget = false;
+            ConfigureDevicePanelVisual(panelImage);
+
+            GameObject headerGo = new GameObject("Header");
+            headerGo.transform.SetParent(slotGo.transform, false);
+            RectTransform headerRect = headerGo.AddComponent<RectTransform>();
+            headerRect.anchorMin = new Vector2(0f, 1f);
+            headerRect.anchorMax = new Vector2(1f, 1f);
+            headerRect.pivot = new Vector2(0.5f, 1f);
+            headerRect.offsetMin = new Vector2(16f, -52f);
+            headerRect.offsetMax = new Vector2(-16f, -8f);
+
+            Text headerText = headerGo.AddComponent<Text>();
+            headerText.text = "Sponsored";
+            headerText.alignment = TextAnchor.MiddleCenter;
+            headerText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            headerText.fontSize = 26;
+            headerText.fontStyle = FontStyle.Bold;
+            headerText.color = SweetHeaderColor;
+            headerText.raycastTarget = false;
+
+            GameObject contentGo = new GameObject("AdContentArea");
+            contentGo.transform.SetParent(slotGo.transform, false);
+            RectTransform contentAreaRect = contentGo.AddComponent<RectTransform>();
+            contentAreaRect.anchorMin = Vector2.zero;
+            contentAreaRect.anchorMax = Vector2.one;
+            contentAreaRect.offsetMin = new Vector2(12f, 12f);
+            contentAreaRect.offsetMax = new Vector2(-12f, -56f);
+
+            Image contentBg = contentGo.AddComponent<Image>();
+            if (useMemoryCardChrome)
+            {
+                contentBg.sprite = UiRoundSpriteUtility.GetRoundedSquareSprite();
+                contentBg.type = Image.Type.Sliced;
+                contentBg.color = MemoryContentFillColor;
+            }
+            else
+            {
+                contentBg.color = MemoryContentFillColor;
+            }
+
+            contentBg.raycastTarget = false;
+
+            GameObject editorPlaceholderGo = BuildEditorPlaceholder(contentGo.transform);
+
+            BreakNativeAdSlotView created = slotGo.AddComponent<BreakNativeAdSlotView>();
+            created.slotRect = rect;
+            created.contentRect = contentAreaRect;
+            created.editorPlaceholder = editorPlaceholderGo;
+            return slotGo;
         }
 
         private static void ConfigureDevicePanelVisual(Image panelImage)
@@ -151,7 +249,10 @@ namespace DressUpGame.UI
             panelImage.color = new Color(1f, 1f, 1f, 0f);
             panelImage.raycastTarget = false;
 #else
-            panelImage.color = SweetPanelColor;
+            if (panelImage.sprite == null)
+            {
+                panelImage.color = SweetPanelColor;
+            }
 #endif
         }
 

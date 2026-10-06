@@ -6,7 +6,7 @@ namespace DressUpGame.UI
 {
     /// <summary>
     /// Top-right sound toggle. Shows sound_on when music is playing and sound_off when muted.
-    /// Turning sound on or off requires watching a rewarded ad on device builds.
+    /// Toggles sound immediately on tap; on device builds an interstitial may follow.
     /// Lives on a persistent canvas overlay so it stays visible during wizard and done views.
     /// </summary>
     [RequireComponent(typeof(Button))]
@@ -211,27 +211,23 @@ namespace DressUpGame.UI
                 return;
             }
 
-            StartCoroutine(ToggleWithRewardedAdRoutine());
+            StartCoroutine(ToggleWithInterstitialRoutine());
         }
 
-        private IEnumerator ToggleWithRewardedAdRoutine()
+        private IEnumerator ToggleWithInterstitialRoutine()
         {
             isTogglePending = true;
             SetInteractable(false);
 
-            bool rewarded = false;
-            yield return RewardedAdController.WaitForRewardRoutine(result => rewarded = result);
-
-            if (rewarded)
+            if (musicController == null)
             {
-                if (musicController == null)
-                {
-                    musicController = BackgroundMusicController.EnsureExists();
-                }
-
-                musicController?.ToggleMuted();
-                RefreshIcon();
+                musicController = BackgroundMusicController.EnsureExists();
             }
+
+            musicController?.ToggleMuted();
+            RefreshIcon();
+
+            yield return BreakInterstitialAdController.WaitForBreakAdRoutine();
 
             GameplayPauseGuard.EnsureUnpaused();
             SetInteractable(true);

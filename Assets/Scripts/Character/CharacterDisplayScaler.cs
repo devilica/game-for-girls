@@ -13,24 +13,28 @@ namespace DressUpGame.Character
         [Header("Screen zones (fraction of full screen height)")]
         [SerializeField] private float topUiFraction = 0.11f;
         [SerializeField] private float bottomUiFraction = 0.36f;
-        [SerializeField] private float doneTopUiFraction = 0.08f;
-        [SerializeField] private float doneBottomUiFraction = 0.30f;
+        [SerializeField] private float doneTopUiFraction = 0.13f;
+        [SerializeField] private float doneBottomUiFraction = 0.28f;
+        [SerializeField] private float doneViewScaleMultiplier = 1.012f;
         [SerializeField] private float paddingFraction = 0.02f;
+        [SerializeField] private float doneViewExtraTopHairClearance = 0.03f;
 
         [Header("Bounds")]
         [SerializeField] private SpriteRenderer bodyRenderer;
 
         public void Apply()
         {
-            ApplyWithUiFractions(topUiFraction, bottomUiFraction);
+            float topFraction = topUiFraction + (GetHairOverhangViewFraction() * 0.75f) + paddingFraction;
+            ApplyWithUiFractions(topFraction, bottomUiFraction);
         }
 
         public void ApplyForDoneView()
         {
-            ApplyWithUiFractions(doneTopUiFraction, doneBottomUiFraction);
+            float topFraction = doneTopUiFraction + GetHairOverhangViewFraction() + doneViewExtraTopHairClearance;
+            ApplyWithUiFractions(topFraction, doneBottomUiFraction, doneViewScaleMultiplier);
         }
 
-        private void ApplyWithUiFractions(float topFraction, float bottomFraction)
+        private void ApplyWithUiFractions(float topFraction, float bottomFraction, float scaleMultiplier = 1f)
         {
             Camera camera = Camera.main;
             if (camera == null || !camera.orthographic)
@@ -65,7 +69,7 @@ namespace DressUpGame.Character
                 return;
             }
 
-            float scale = availableHeight / bounds.size.y;
+            float scale = (availableHeight / bounds.size.y) * scaleMultiplier;
             transform.localScale = Vector3.one * scale;
 
             bounds = boundsSource.bounds;
@@ -167,6 +171,47 @@ namespace DressUpGame.Character
             }
 
             return bodyRenderer;
+        }
+
+        /// <summary>
+        /// How far hair/accessories extend above the body top, as a fraction of screen height (after scale is reset to 1).
+        /// </summary>
+        private float GetHairOverhangViewFraction()
+        {
+            Camera camera = Camera.main;
+            SpriteRenderer boundsSource = ResolveBoundsRenderer();
+            if (camera == null || !camera.orthographic || boundsSource == null || boundsSource.sprite == null)
+            {
+                return 0f;
+            }
+
+            transform.localScale = Vector3.one;
+            float bodyTop = boundsSource.bounds.max.y;
+            float spriteTop = bodyTop;
+
+            SpriteRenderer[] renderers = GetComponentsInChildren<SpriteRenderer>(false);
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                SpriteRenderer renderer = renderers[i];
+                if (renderer == null || !renderer.enabled || renderer.sprite == null)
+                {
+                    continue;
+                }
+
+                if (renderer.bounds.max.y > spriteTop)
+                {
+                    spriteTop = renderer.bounds.max.y;
+                }
+            }
+
+            float overhangWorld = Mathf.Max(0f, spriteTop - bodyTop);
+            if (overhangWorld <= 0.001f)
+            {
+                return 0f;
+            }
+
+            float viewHeight = camera.orthographicSize * 2f;
+            return overhangWorld / viewHeight;
         }
     }
 }

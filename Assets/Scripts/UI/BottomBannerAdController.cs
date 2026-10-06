@@ -20,6 +20,12 @@ namespace DressUpGame.UI
 
         private static BottomBannerAdController instance;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            instance = null;
+        }
+
         private float layoutInsetReferenceUnits = FallbackBannerHeightReferenceUnits;
 
 #if UNITY_ANDROID || UNITY_IOS
@@ -58,6 +64,12 @@ namespace DressUpGame.UI
                 return;
             }
 
+            BottomBannerAdController existing = FindAnyObjectByType<BottomBannerAdController>();
+            if (existing != null)
+            {
+                return;
+            }
+
             GameObject controllerObject = new GameObject("BottomBannerAdController");
             controllerObject.AddComponent<BottomBannerAdController>();
         }
@@ -66,7 +78,17 @@ namespace DressUpGame.UI
         {
             if (instance != null && instance != this)
             {
-                Destroy(gameObject);
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    DestroyImmediate(gameObject);
+                }
+                else
+#endif
+                {
+                    Destroy(gameObject);
+                }
+
                 return;
             }
 
@@ -84,7 +106,9 @@ namespace DressUpGame.UI
 
         private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name == MainMenuScreenController.MenuSceneName || scene.name == "MainScene")
+            if (scene.name == MainMenuScreenController.MenuSceneName
+                || scene.name == "MainScene"
+                || scene.name == "PetScene")
             {
                 EnsureBannerActive();
             }

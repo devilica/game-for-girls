@@ -17,6 +17,7 @@ namespace DressUpGame.Editor
         private const string SplashScenePath = "Assets/Scenes/SplashScene.unity";
         private const string MainScenePath = "Assets/Scenes/MainScene.unity";
         private const string PetScenePath = "Assets/Scenes/PetScene.unity";
+        private const string MemoryScenePath = "Assets/Scenes/MemoryScene.unity";
 
         [MenuItem("Dress Up Game/Setup Main Menu Scene")]
         public static void SetupMainMenuScene()
@@ -41,7 +42,7 @@ namespace DressUpGame.Editor
             ConfigureBuildSettings();
             AssetDatabase.SaveAssets();
 
-            Debug.Log("Dress Up Game: MenuScene created. Build order is Splash → Menu → Main → Pet.");
+            Debug.Log("Dress Up Game: MenuScene created. Build order is Splash → Menu → Main → Pet → Memory.");
         }
 
         public static void ConfigureBuildSettings()
@@ -56,6 +57,15 @@ namespace DressUpGame.Editor
             if (System.IO.File.Exists(PetScenePath))
             {
                 scenes.Add(new EditorBuildSettingsScene(PetScenePath, true));
+            }
+
+            if (System.IO.File.Exists(MemoryScenePath))
+            {
+                string memoryGuid = AssetDatabase.AssetPathToGUID(MemoryScenePath);
+                if (!string.IsNullOrEmpty(memoryGuid))
+                {
+                    scenes.Add(new EditorBuildSettingsScene(MemoryScenePath, true));
+                }
             }
 
             EditorBuildSettings.scenes = scenes.ToArray();

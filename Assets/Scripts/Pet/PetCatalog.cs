@@ -21,7 +21,10 @@ namespace DressUpGame.Pet
 
             if (category != PetCustomizationCategory.Pet)
             {
-                return filtered;
+                return filtered
+                    .OrderBy(item => IsNoneForCategory(item, category) || item.IsNoneOption ? 0 : 1)
+                    .ThenBy(item => PetAccessorySort.GetNumberedIndex(category, item.Id))
+                    .ThenBy(item => item.Id, System.StringComparer.Ordinal);
             }
 
             return filtered.OrderBy(item => item, PetItemDisplayOrderComparer.Instance);
@@ -136,9 +139,9 @@ namespace DressUpGame.Pet
                 }
 
                 string suffix = petId.Substring(baseId.Length + 1).ToLowerInvariant();
-                for (int i = 0; i < PetLayoutIds.ColorSuffixes.Length; i++)
+                for (int i = 0; i < PetRecolorPalette.ColorSuffixes.Length; i++)
                 {
-                    if (PetLayoutIds.ColorSuffixes[i] == suffix)
+                    if (PetRecolorPalette.ColorSuffixes[i] == suffix)
                     {
                         colorRank = i + 1;
                         return;

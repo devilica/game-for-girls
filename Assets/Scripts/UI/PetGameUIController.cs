@@ -1,5 +1,6 @@
 using DressUpGame.Pet;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DressUpGame.UI
 {
@@ -216,6 +217,33 @@ namespace DressUpGame.UI
             };
 
             itemsPanel.ShowCategory(customizer.Catalog, category, selected);
+        }
+
+        public bool TryHandleBackNavigation()
+        {
+            if (wizard == null)
+            {
+                wizard = FindAnyObjectByType<PetWizardController>();
+            }
+
+            if (wizard != null && wizard.IsWizardVisible)
+            {
+                if (wizard.IsEditMode && wizard.IsAtFirstWizardStep)
+                {
+                    wizard.ExitEditModeToDoneView();
+                    ShowDoneView();
+                    return true;
+                }
+
+                if (wizard.TryGoToPreviousStep())
+                {
+                    return true;
+                }
+            }
+
+            GameplayPauseGuard.EnsureUnpaused();
+            SceneManager.LoadScene(MainMenuScreenController.MenuSceneName);
+            return true;
         }
     }
 }

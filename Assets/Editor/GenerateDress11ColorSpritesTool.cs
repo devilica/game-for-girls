@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using DressUpGame.Data;
 using UnityEditor;
 using UnityEngine;
@@ -17,6 +18,10 @@ namespace DressUpGame.Editor
         private const string SourcePath = "Assets/Sprites/Character/Dresses/dress_11.png";
         private const string DressDataFolder = "Assets/Resources/Items/Dresses";
         private const string VariantTextureFolder = "Assets/Resources/Items/Dresses/Dress11VariantTextures";
+
+        private static bool syncInProgress;
+
+        public static bool IsSyncInProgress => syncInProgress;
 
         private static readonly (string suffix, string fileStem, string displayName, Color fabricColor)[] Variants =
         {
@@ -43,12 +48,97 @@ namespace DressUpGame.Editor
                 "OK");
         }
 
+        [MenuItem("Dress Up Game/Validate Dress 11 Variants")]
+        public static void ValidateDress11Variants()
+        {
+            StringBuilder report = new StringBuilder();
+            report.AppendLine("Dress 11 variant validation:");
+
+            string baseGuid = AssetDatabase.AssetPathToGUID(SourcePath);
+            if (string.IsNullOrEmpty(baseGuid))
+            {
+                report.AppendLine($"- FAIL: Missing source sprite at {SourcePath}");
+                Debug.LogError(report.ToString());
+                return;
+            }
+
+            report.AppendLine($"- OK: Base dress_11.png GUID {baseGuid}");
+
+            int failures = 0;
+            foreach ((string suffix, string fileStem, string displayName, _) in Variants)
+            {
+                string itemPath = $"{DressDataFolder}/Dress_{ShapeIndex}_{suffix}.asset";
+                DressItem item = AssetDatabase.LoadAssetAtPath<DressItem>(itemPath);
+                if (item == null)
+                {
+                    failures++;
+                    report.AppendLine($"- FAIL: Missing {itemPath}");
+                    continue;
+                }
+
+                if (item.Sprite == null)
+                {
+                    failures++;
+                    report.AppendLine($"- FAIL: dress_11_{suffix} ({displayName}) has no sprite. Run Sync Dress 11 Variants.");
+                    continue;
+                }
+
+                string spritePath = AssetDatabase.GetAssetPath(item.Sprite);
+                string spriteGuid = AssetDatabase.AssetPathToGUID(spritePath);
+                if (spriteGuid == baseGuid)
+                {
+                    failures++;
+                    report.AppendLine(
+                        $"- FAIL: dress_11_{suffix} ({displayName}) still uses base dress_11.png. Run Sync Dress 11 Variants.");
+                    continue;
+                }
+
+                string expectedPath = $"{VariantTextureFolder}/{fileStem}.png";
+                if (!spritePath.Replace('\\', '/').Equals(expectedPath, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    failures++;
+                    report.AppendLine(
+                        $"- FAIL: dress_11_{suffix} sprite path is {spritePath}, expected {expectedPath}.");
+                    continue;
+                }
+
+                report.AppendLine($"- OK: dress_11_{suffix} ({displayName}) → {fileStem}.png");
+            }
+
+            if (failures == 0)
+            {
+                report.AppendLine("- OK: All 7 color variants use distinct recolored sprites.");
+            }
+
+            if (failures > 0)
+            {
+                Debug.LogError(report.ToString());
+            }
+            else
+            {
+                Debug.Log(report.ToString());
+            }
+        }
+
         public static bool IsDressShapeWithRecoloredVariants(int shapeIndex) => shapeIndex == ShapeIndex;
 
         public static void EnsureVariantTexturesAndItems(DressLayout layout, Sprite originalSprite)
         {
-            GenerateVariantTextures();
-            SyncDress11ItemsInternal(layout, originalSprite);
+            if (syncInProgress)
+            {
+                return;
+            }
+
+            syncInProgress = true;
+            try
+            {
+                GenerateVariantTextures();
+                SyncDress11ItemsInternal(layout, originalSprite);
+            }
+            finally
+            {
+                syncInProgress = false;
+            }
         }
 
         public static List<DressItem> LoadDress11ItemsForCatalog()
@@ -124,14 +214,19 @@ namespace DressUpGame.Editor
             {
                 string spritePath = $"{VariantTextureFolder}/{fileStem}.png";
                 Sprite variantSprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+                string path = $"{DressDataFolder}/Dress_{ShapeIndex}_{suffix}.asset";
+                DressItem item = LoadOrCreate<DressItem>(path);
                 if (variantSprite == null)
                 {
-                    Debug.LogWarning($"Dress Up Game: Missing variant texture {spritePath}. Run Sync Dress 11 Variants.");
+                    Debug.LogError(
+                        $"Dress Up Game: Missing variant texture {spritePath} for dress_11_{suffix}. " +
+                        "Run Dress Up Game → Sync Dress 11 Variants.");
+                    item.SetRuntimeData($"dress_11_{suffix}", $"Dress 11 {displayName}", null, Color.white);
+                    item.SetLayerLayout(layout.Offset, layout.Scale);
+                    EditorUtility.SetDirty(item);
                     continue;
                 }
 
-                string path = $"{DressDataFolder}/Dress_{ShapeIndex}_{suffix}.asset";
-                DressItem item = LoadOrCreate<DressItem>(path);
                 item.SetRuntimeData(
                     $"dress_11_{suffix}",
                     $"Dress 11 {displayName}",

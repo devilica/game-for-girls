@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -80,7 +81,7 @@ namespace DressUpGame.UI
 #endif
         }
 
-        public IEnumerator ShowForBreakRoutine(RectTransform slotRect = null)
+        public IEnumerator ShowForBreakRoutine(RectTransform slotRect = null, Action<bool> onComplete = null)
         {
 #if UNITY_ANDROID || UNITY_IOS
             const float loadTimeoutSeconds = 2.5f;
@@ -99,19 +100,26 @@ namespace DressUpGame.UI
                 yield return null;
             }
 
-            ShowForBreak(slotRect);
+            bool success = TryShowInSlot(slotRect);
+            onComplete?.Invoke(success);
 #else
+            onComplete?.Invoke(false);
             yield break;
 #endif
         }
 
         public void ShowForBreak(RectTransform slotRect = null)
         {
+            TryShowInSlot(slotRect);
+        }
+
+        /// <returns>True when a loaded native ad was shown in the slot (or default position).</returns>
+        public bool TryShowInSlot(RectTransform slotRect = null)
+        {
 #if UNITY_ANDROID || UNITY_IOS
             if (nativeOverlayAd == null)
             {
-                Debug.LogWarning("Break native ad is not loaded yet.");
-                return;
+                return false;
             }
 
             NativeTemplateStyle style = CreateSweetTemplateStyle();
@@ -126,6 +134,9 @@ namespace DressUpGame.UI
 
             nativeOverlayAd.Show();
             isVisible = true;
+            return true;
+#else
+            return false;
 #endif
         }
 
@@ -157,6 +168,14 @@ namespace DressUpGame.UI
         }
 
         public void HideAfterBreak()
+        {
+            HideFromSlot();
+        }
+
+        /// <summary>
+        /// Hides the native overlay, disposes the loaded ad, and queues a fresh preload (memory screen or tea break).
+        /// </summary>
+        public void HideFromSlot()
         {
 #if UNITY_ANDROID || UNITY_IOS
             if (nativeOverlayAd == null)

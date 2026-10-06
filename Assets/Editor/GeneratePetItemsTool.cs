@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using DressUpGame.Pet;
 using UnityEditor;
@@ -20,14 +19,6 @@ namespace DressUpGame.Editor
             ("Hairbows", @"^bow_(\d+)$", "bow_none", "None", PetCustomizationCategory.Hairbow),
             ("Collar", @"^collar_(\d+)$", "collar_none", "None", PetCustomizationCategory.Collar),
             ("Glasses", @"^glasses_(\d+)$", "glasses_none", "None", PetCustomizationCategory.Glasses)
-        };
-
-        private static readonly (string suffix, Color tint)[] PetColorVariants =
-        {
-            ("yellow", new Color(1f, 0.93f, 0.58f)),
-            ("brown", new Color(0.72f, 0.52f, 0.38f)),
-            ("orange", new Color(1f, 0.72f, 0.42f)),
-            ("grey", new Color(0.78f, 0.78f, 0.78f))
         };
 
         [MenuItem("Dress Up Game/Fix Pet Sprite Imports")]
@@ -51,7 +42,8 @@ namespace DressUpGame.Editor
 
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
-                importer.spritePixelsPerUnit = 256;
+                importer.spritePixelsPerUnit =
+                    PetVariantSpriteImportUtility.GetDefaultPixelsPerUnitForPetSpritePath(assetPath);
                 importer.alphaIsTransparency = true;
                 importer.SaveAndReimport();
                 fixedCount++;
@@ -60,13 +52,22 @@ namespace DressUpGame.Editor
             Debug.Log($"Dress Up Game: Fixed {fixedCount} pet PNG import(s) to Sprite.");
         }
 
+        [MenuItem("Dress Up Game/Sync Pet Catalog From Items")]
+        public static void SyncPetCatalogFromItems()
+        {
+            List<PetItem> allItems = CollectAllPetItemAssets();
+            SortCatalogItems(allItems);
+            UpdateCatalog(allItems);
+            AssetDatabase.SaveAssets();
+            Debug.Log($"Dress Up Game: Pet catalog synced from {allItems.Count} item asset(s).");
+        }
+
         [MenuItem("Dress Up Game/Generate Pet Items")]
         public static void GeneratePetItems()
         {
             FixPetSpriteImports();
             EnsureFolders();
             List<PetItem> allItems = new List<PetItem>();
-            List<PetItem> basePets = new List<PetItem>();
 
             foreach (var cat in Categories)
             {
@@ -105,58 +106,213 @@ namespace DressUpGame.Editor
                     item.SetEditorData(id, DisplayName(cat.category, index), cat.category, sprite, false);
                     EditorUtility.SetDirty(item);
                     allItems.Add(item);
+                }
 
-                    if (cat.category == PetCustomizationCategory.Pet)
-                    {
-                        basePets.Add(item);
-                    }
+                if (cat.category != PetCustomizationCategory.Pet)
+                {
+                    AppendExistingCategoryAssets(allItems, cat.folder, cat.pattern, cat.noneId);
+                }
+
+                if (cat.category == PetCustomizationCategory.Pet)
+                {
+                    CollectPetRecolorVariants(allItems, spriteFolder);
+                    AppendExistingCategoryAssets(allItems, cat.folder, @"^pet_", "pet_none");
                 }
             }
 
-            EnsurePetColorVariants(basePets, allItems);
-            PropagateAccessoryLayoutsForColorVariants(allItems, basePets);
+            PropagateBow6LayoutsToVariants(allItems);
+            PropagateCollarVariantLayouts(allItems);
+
             SortCatalogItems(allItems);
 
             UpdateCatalog(allItems);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"Dress Up Game: Generated {allItems.Count} pet catalog item(s) (includes color variants).");
+            Debug.Log($"Dress Up Game: Generated {allItems.Count} pet catalog item(s).");
         }
 
-        private static void EnsurePetColorVariants(List<PetItem> basePets, List<PetItem> allItems)
+        private static void CollectPetRecolorVariants(List<PetItem> allItems, string spriteFolder)
         {
-            string petsFolder = $"{ItemsRoot}/Pets";
-            foreach (PetItem basePet in basePets)
+            foreach (string basePetId in PetRecolorPalette.RecolorBasePetIds)
             {
-                if (basePet == null || !PetLayoutIds.IsBasePetId(basePet.Id))
+                if (!PetRecolorPalette.SupportsRecolor(basePetId))
                 {
                     continue;
                 }
 
-                foreach ((string suffix, Color tint) in PetColorVariants)
+                PetItem basePet = FindPetItem(allItems, basePetId);
+                if (basePet == null)
                 {
-                    string variantId = PetLayoutIds.BuildColorVariantId(basePet.Id, suffix);
-                    string assetPath = $"{petsFolder}/{variantId}.asset";
-                    PetItem variant = LoadOrCreate<PetItem>(assetPath);
-                    string variantName = $"{basePet.DisplayName} ({Capitalize(suffix)})";
-                    variant.SetColorVariantFromBase(basePet, variantId, variantName, tint);
-                    EditorUtility.SetDirty(variant);
+                    continue;
+                }
 
-                    if (!allItems.Contains(variant))
+                int petNumber = int.Parse(basePetId.Substring(4));
+                foreach (string suffix in PetRecolorPalette.ColorSuffixes)
+                {
+                    if (PetRecolorPalette.IsVariantSkipped(basePetId, suffix))
                     {
-                        allItems.Add(variant);
+                        continue;
                     }
+
+                    string variantId = PetLayoutIds.BuildColorVariantId(basePetId, suffix);
+                    string pngPath = $"{spriteFolder}/{variantId}.png";
+                    if (!File.Exists(pngPath))
+                    {
+                        continue;
+                    }
+
+                    string assetPath = $"{ItemsRoot}/Pets/{variantId}.asset";
+                    PetItem item = LoadOrCreate<PetItem>(assetPath);
+                    Sprite sprite = SpriteImportUtility.LoadSprite(pngPath);
+                    item.SetRecolorVariantFromBase(
+                        basePet,
+                        variantId,
+                        PetVariantDisplayName(petNumber, suffix),
+                        sprite);
+                    EditorUtility.SetDirty(item);
+                    allItems.Add(item);
+                }
+            }
+
+            PropagateRecolorAccessoryLayouts(allItems);
+        }
+
+        private static List<PetItem> CollectAllPetItemAssets()
+        {
+            List<PetItem> allItems = new List<PetItem>();
+            string[] guids = AssetDatabase.FindAssets("t:PetItem", new[] { ItemsRoot });
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                PetItem item = AssetDatabase.LoadAssetAtPath<PetItem>(path);
+                if (item != null)
+                {
+                    allItems.Add(item);
+                }
+            }
+
+            return allItems;
+        }
+
+        private static void AppendExistingCategoryAssets(
+            List<PetItem> allItems,
+            string folderName,
+            string idPattern,
+            string noneId)
+        {
+            string folder = $"{ItemsRoot}/{folderName}";
+            if (!Directory.Exists(folder))
+            {
+                return;
+            }
+
+            Regex regex = new Regex(idPattern, RegexOptions.IgnoreCase);
+            foreach (string assetPath in Directory.GetFiles(folder, "*.asset"))
+            {
+                string fileName = Path.GetFileNameWithoutExtension(assetPath);
+                if (string.Equals(fileName, noneId, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (!regex.IsMatch(fileName))
+                {
+                    continue;
+                }
+
+                if (FindPetItem(allItems, fileName) != null)
+                {
+                    continue;
+                }
+
+                string unityPath = assetPath.Replace('\\', '/');
+                PetItem item = AssetDatabase.LoadAssetAtPath<PetItem>(unityPath);
+                if (item != null)
+                {
+                    allItems.Add(item);
                 }
             }
         }
 
-        private static void PropagateAccessoryLayoutsForColorVariants(List<PetItem> allItems, List<PetItem> basePets)
+        private static PetItem FindPetItem(List<PetItem> allItems, string petId)
         {
-            List<string> basePetIds = basePets
-                .Where(p => p != null && PetLayoutIds.IsBasePetId(p.Id))
-                .Select(p => p.Id)
-                .ToList();
+            foreach (PetItem candidate in allItems)
+            {
+                if (candidate != null && candidate.Id == petId)
+                {
+                    return candidate;
+                }
+            }
 
+            return null;
+        }
+
+        private static void PropagateBow6LayoutsToVariants(List<PetItem> allItems)
+        {
+            PetItem bow6 = FindPetItem(allItems, "bow_6");
+            if (bow6 == null)
+            {
+                return;
+            }
+
+            for (int index = 8; index <= 20; index++)
+            {
+                PetItem target = FindPetItem(allItems, $"bow_{index}");
+                if (target == null)
+                {
+                    continue;
+                }
+
+                target.CopyLayerLayoutsFrom(bow6);
+                foreach (string basePetId in PetRecolorPalette.RecolorBasePetIds)
+                {
+                    target.EnsureColorVariantPetLayouts(basePetId);
+                }
+
+                EditorUtility.SetDirty(target);
+            }
+        }
+
+        private static void PropagateCollarVariantLayouts(List<PetItem> allItems)
+        {
+            PetItem collar4 = FindPetItem(allItems, "collar_4");
+            if (collar4 != null)
+            {
+                for (int index = 7; index <= 12; index++)
+                {
+                    ApplyCollarLayoutSource(allItems, collar4, index);
+                }
+            }
+
+            PetItem collar2 = FindPetItem(allItems, "collar_2");
+            if (collar2 != null)
+            {
+                for (int index = 13; index <= 17; index++)
+                {
+                    ApplyCollarLayoutSource(allItems, collar2, index);
+                }
+            }
+        }
+
+        private static void ApplyCollarLayoutSource(List<PetItem> allItems, PetItem source, int collarIndex)
+        {
+            PetItem target = FindPetItem(allItems, $"collar_{collarIndex}");
+            if (target == null)
+            {
+                return;
+            }
+
+            target.CopyLayerLayoutsFrom(source);
+            foreach (string basePetId in PetRecolorPalette.RecolorBasePetIds)
+            {
+                target.EnsureColorVariantPetLayouts(basePetId);
+            }
+
+            EditorUtility.SetDirty(target);
+        }
+
+        private static void PropagateRecolorAccessoryLayouts(List<PetItem> allItems)
+        {
             foreach (PetItem item in allItems)
             {
                 if (item == null || item.Category == PetCustomizationCategory.Pet)
@@ -164,7 +320,7 @@ namespace DressUpGame.Editor
                     continue;
                 }
 
-                foreach (string basePetId in basePetIds)
+                foreach (string basePetId in PetRecolorPalette.RecolorBasePetIds)
                 {
                     item.EnsureColorVariantPetLayouts(basePetId);
                 }
@@ -172,6 +328,19 @@ namespace DressUpGame.Editor
                 EditorUtility.SetDirty(item);
             }
         }
+
+        private static string PetVariantDisplayName(int petNumber, string suffix) =>
+            suffix switch
+            {
+                "dark_yellow" => $"Pet {petNumber} Dark Yellow",
+                "dark_orange" => $"Pet {petNumber} Dark Orange",
+                "grey" => $"Pet {petNumber} Grey",
+                "black" => $"Pet {petNumber} Black",
+                "brown" => $"Pet {petNumber} Brown",
+                "red" => $"Pet {petNumber} Red",
+                "green" => $"Pet {petNumber} Green",
+                _ => $"Pet {petNumber} {suffix}"
+            };
 
         private static void SortCatalogItems(List<PetItem> items)
         {
@@ -203,8 +372,26 @@ namespace DressUpGame.Editor
                     return ComparePetIds(a.Id, b.Id);
                 }
 
-                return string.CompareOrdinal(a.Id, b.Id);
+                int noneOrder = CompareNoneFirst(a, b);
+                if (noneOrder != 0)
+                {
+                    return noneOrder;
+                }
+
+                return PetAccessorySort.CompareNumberedIds(a.Category, a.Id, b.Id);
             });
+        }
+
+        private static int CompareNoneFirst(PetItem left, PetItem right)
+        {
+            bool leftNone = left.IsNoneOption;
+            bool rightNone = right.IsNoneOption;
+            if (leftNone == rightNone)
+            {
+                return 0;
+            }
+
+            return leftNone ? -1 : 1;
         }
 
         private static int ComparePetIds(string leftId, string rightId)
@@ -219,16 +406,15 @@ namespace DressUpGame.Editor
                 return 1;
             }
 
-            ParsePetSortKey(leftId, out int leftIndex, out int leftColorRank);
-            ParsePetSortKey(rightId, out int rightIndex, out int rightColorRank);
-
-            bool leftIsBase = leftColorRank == 0;
-            bool rightIsBase = rightColorRank == 0;
-            if (leftIsBase != rightIsBase)
+            bool leftBase = PetLayoutIds.IsBasePetId(leftId);
+            bool rightBase = PetLayoutIds.IsBasePetId(rightId);
+            if (leftBase != rightBase)
             {
-                return leftIsBase ? -1 : 1;
+                return leftBase ? -1 : 1;
             }
 
+            ParsePetSortKey(leftId, out int leftIndex, out int leftColorRank);
+            ParsePetSortKey(rightId, out int rightIndex, out int rightColorRank);
             int indexCompare = leftIndex.CompareTo(rightIndex);
             return indexCompare != 0 ? indexCompare : leftColorRank.CompareTo(rightColorRank);
         }
@@ -237,46 +423,37 @@ namespace DressUpGame.Editor
         {
             petIndex = 999;
             colorRank = 0;
-            if (string.IsNullOrEmpty(petId) || petId == "pet_none")
+            if (string.IsNullOrEmpty(petId))
             {
                 return;
             }
 
-            Match baseMatch = Regex.Match(petId, @"^pet_(\d+)$", RegexOptions.IgnoreCase);
-            if (baseMatch.Success)
+            if (PetLayoutIds.IsBasePetId(petId))
             {
-                petIndex = int.Parse(baseMatch.Groups[1].Value);
-                colorRank = 0;
+                petIndex = int.Parse(petId.Substring(4));
                 return;
             }
 
-            Match variantMatch = Regex.Match(
-                petId,
-                @"^pet_(\d+)_(yellow|brown|orange|grey)$",
-                RegexOptions.IgnoreCase);
-            if (variantMatch.Success)
+            if (!PetLayoutIds.IsColorVariantPetId(petId))
             {
-                petIndex = int.Parse(variantMatch.Groups[1].Value);
-                string color = variantMatch.Groups[2].Value.ToLowerInvariant();
-                for (int i = 0; i < PetLayoutIds.ColorSuffixes.Length; i++)
+                return;
+            }
+
+            string baseId = PetLayoutIds.ResolveBasePetId(petId);
+            if (PetLayoutIds.IsBasePetId(baseId))
+            {
+                petIndex = int.Parse(baseId.Substring(4));
+            }
+
+            string suffix = petId.Substring(baseId.Length + 1).ToLowerInvariant();
+            for (int i = 0; i < PetRecolorPalette.ColorSuffixes.Length; i++)
+            {
+                if (PetRecolorPalette.ColorSuffixes[i] == suffix)
                 {
-                    if (PetLayoutIds.ColorSuffixes[i] == color)
-                    {
-                        colorRank = i + 1;
-                        return;
-                    }
+                    colorRank = i + 1;
+                    return;
                 }
             }
-        }
-
-        private static string Capitalize(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return value;
-            }
-
-            return char.ToUpperInvariant(value[0]) + value.Substring(1);
         }
 
         private static string fileNameForCategory(PetCustomizationCategory category, int index)

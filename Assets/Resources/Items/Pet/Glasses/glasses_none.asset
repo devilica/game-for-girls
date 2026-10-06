@@ -20,3 +20,8 @@ MonoBehaviour:
   isNoneOption: 1
   layerOffset: {x: 0, y: 0, z: 0}
   layerScale: {x: 1, y: 1, z: 1}
+  perPetLayouts: []
+  hairbowLayerAnchorOffset: {x: 0, y: 0, z: 0}
+  collarLayerAnchorOffset: {x: 0, y: 0, z: 0}
+  glassesLayerAnchorOffset: {x: 0, y: 0, z: 0}
+  layoutBasePetId: 

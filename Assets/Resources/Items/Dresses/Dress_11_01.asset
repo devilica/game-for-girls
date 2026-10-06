@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Data.DressItem
   id: dress_11_01
   displayName: Dress 11 Yellow
-  sprite: {fileID: 21300000, guid: 48714fc56d1d3424992e680a3fac69bc, type: 3}
+  sprite: {fileID: 21300000, guid: 42014733fa484e23a6cc418860a20d40, type: 3}
   tintColor: {r: 1, g: 1, b: 1, a: 1}
   category: 2
   layerOffset: {x: -0.0172, y: 0.4144, z: 0}
