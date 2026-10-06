@@ -39,7 +39,7 @@ namespace DressUpGame.UI
         [SerializeField] private CharacterCustomizer customizer;
         [SerializeField] private BreakScreenController breakScreen;
 
-        private const int BreakEveryNextSteps = 4;
+        private const int BreakEveryNextSteps = 6;
 
         private WizardStep currentStep = WizardStep.Dress;
         private readonly HashSet<WizardStep> completedSteps = new HashSet<WizardStep>();
@@ -48,6 +48,8 @@ namespace DressUpGame.UI
         private Coroutine nextStepCoroutine;
 
         public event Action WizardCompleted;
+
+        public bool IsWizardVisible => wizardPanel != null && wizardPanel.activeSelf;
 
         private void Awake()
         {
@@ -233,15 +235,21 @@ namespace DressUpGame.UI
             UpdateNavigation();
         }
 
-        private void GoToPreviousStep()
+        public bool TryGoToPreviousStep()
         {
-            if (isTransitioning || currentStep == WizardStep.Dress)
+            if (!IsWizardVisible || isTransitioning || currentStep == WizardStep.Dress)
             {
-                return;
+                return false;
             }
 
             currentStep--;
             ShowStep(currentStep);
+            return true;
+        }
+
+        private void GoToPreviousStep()
+        {
+            TryGoToPreviousStep();
         }
 
         private void OnApplicationFocus(bool hasFocus)

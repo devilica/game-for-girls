@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dependencies>
+  <androidPackages>
+    <androidPackage spec="com.google.android.libraries.ads.mobile.sdk:ads-mobile-sdk:1.4.0" />
+  </androidPackages>
+</dependencies>

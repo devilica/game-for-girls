@@ -154,6 +154,28 @@ namespace DressUpGame.Pet
             });
         }
 
+        public void CopyLayerLayoutsFrom(PetItem source)
+        {
+            if (source == null)
+            {
+                return;
+            }
+
+            layerOffset = source.layerOffset;
+            layerScale = source.layerScale;
+            hairbowLayerAnchorOffset = source.hairbowLayerAnchorOffset;
+            perPetLayouts.Clear();
+            foreach (PetSpecificLayerLayout entry in source.perPetLayouts)
+            {
+                perPetLayouts.Add(new PetSpecificLayerLayout
+                {
+                    petId = entry.petId,
+                    layerOffset = entry.layerOffset,
+                    layerScale = entry.layerScale
+                });
+            }
+        }
+
         public void SetLayerAnchorAdjust(string layerName, Vector3 adjust)
         {
             switch (layerName)
@@ -213,11 +235,36 @@ namespace DressUpGame.Pet
                 return;
             }
 
-            foreach (string colorSuffix in PetLayoutIds.ColorSuffixes)
+            foreach (string colorSuffix in PetRecolorPalette.ColorSuffixes)
             {
                 string variantPetId = PetLayoutIds.BuildColorVariantId(basePetId, colorSuffix);
                 SetLayoutForPet(variantPetId, offset, scale);
             }
+        }
+
+        public void SetRecolorVariantFromBase(
+            PetItem basePet,
+            string variantId,
+            string variantDisplayName,
+            Sprite variantSprite)
+        {
+            if (basePet == null)
+            {
+                return;
+            }
+
+            id = variantId;
+            displayName = variantDisplayName;
+            category = PetCustomizationCategory.Pet;
+            sprite = variantSprite;
+            isNoneOption = false;
+            tintColor = Color.white;
+            layoutBasePetId = basePet.Id;
+            layerOffset = basePet.LayerOffset;
+            layerScale = basePet.LayerScale;
+            hairbowLayerAnchorOffset = basePet.hairbowLayerAnchorOffset;
+            collarLayerAnchorOffset = basePet.collarLayerAnchorOffset;
+            glassesLayerAnchorOffset = basePet.glassesLayerAnchorOffset;
         }
 #endif
 

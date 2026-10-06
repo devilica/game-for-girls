@@ -16,8 +16,10 @@ namespace DressUpGame.UI
         public const string MenuSceneName = "MenuScene";
         private const string MainSceneName = "MainScene";
         private const string PetSceneName = "PetScene";
+        private const string MemorySceneName = "MemoryScene";
         private const string GameButtonResourcePath = "UI/menu/game_1";
         private const string PetGameButtonResourcePath = "UI/menu/game_2";
+        private const string MemoryGameButtonResourcePath = "UI/menu/game_3";
         private const string MoreGamesResourcePath = "UI/menu/more_games";
         private const string BackgroundResourcePath = "UI/menu/background";
         private const string WelcomeResourcePath = "UI/menu/welcome";
@@ -28,8 +30,8 @@ namespace DressUpGame.UI
         private const float GameRowCardWidthReference = 340f;
         private const float GameRowSpacingReference = 20f;
         private const string GameCardsRowName = "GameCardsRow";
-        private const float MoreGamesCardWidthReference = 560f;
         private const string MoreGamesRowName = "MoreGamesRow";
+        private const string MemoryGameCardName = "MemoryGameCard";
         private const float CardSpacingReference = 28f;
         private const float CardInnerPaddingReference = 0f;
         private const float MenuButtonsVerticalOffsetReference = -140f;
@@ -41,6 +43,7 @@ namespace DressUpGame.UI
 
         private bool isStartingGame;
         private bool isStartingPetGame;
+        private bool isStartingMemoryGame;
         private bool isMoreGamesAdPending;
 
         private void Awake()
@@ -54,7 +57,7 @@ namespace DressUpGame.UI
         private void Start()
         {
             MobileAdsInitializer.EnsureInitialized();
-            RewardedAdController.EnsureExists();
+            BreakInterstitialAdController.EnsureExists();
             BottomBannerAdController.EnsureExists();
             BottomBannerAdController.LayoutInsetChanged += HandleMenuLayoutInsetChanged;
 
@@ -129,7 +132,27 @@ namespace DressUpGame.UI
                 playCard.SetAsFirstSibling();
             }
 
-            EnsureMoreGamesRow(column);
+            Transform secondaryRow = EnsureSecondaryGamesRow(column);
+            Transform memoryCardExisting = secondaryRow.Find(MemoryGameCardName);
+            Sprite memoryMenuSprite = LoadMenuSprite(MemoryGameButtonResourcePath);
+            if (memoryCardExisting == null && memoryMenuSprite != null)
+            {
+                CreateMenuCard(
+                    secondaryRow,
+                    memoryMenuSprite,
+                    GameRowCardWidthReference,
+                    true,
+                    FrameColor,
+                    StartMemoryGame,
+                    showPlayHintBorder: false,
+                    layoutHostName: MemoryGameCardName);
+                memoryCardExisting = secondaryRow.Find(MemoryGameCardName);
+                if (memoryCardExisting != null)
+                {
+                    memoryCardExisting.SetAsFirstSibling();
+                }
+            }
+
             ApplyMenuColumnWidth(column);
 
             Transform petCardFinal = gamesRow.Find("PetGameCard");
@@ -143,8 +166,13 @@ namespace DressUpGame.UI
                 RewireMenuCardButton(petCardFinal, StartPetGame);
             }
 
-            Transform moreGamesCard = column.Find(MoreGamesRowName)?.Find("MoreGamesCard")
-                ?? column.Find("MoreGamesCard");
+            memoryCardExisting = secondaryRow?.Find(MemoryGameCardName);
+            if (memoryCardExisting != null)
+            {
+                RewireMenuCardButton(memoryCardExisting, StartMemoryGame);
+            }
+
+            Transform moreGamesCard = secondaryRow?.Find("MoreGamesCard") ?? column.Find("MoreGamesCard");
             if (moreGamesCard != null)
             {
                 RewireMenuCardButton(moreGamesCard, HandleMoreGamesClicked);
@@ -225,7 +253,7 @@ namespace DressUpGame.UI
             return rowGo.transform;
         }
 
-        private static Transform EnsureMoreGamesRow(Transform column)
+        private static Transform EnsureSecondaryGamesRow(Transform column)
         {
             Transform existing = column.Find(MoreGamesRowName);
             if (existing == null)
@@ -235,7 +263,7 @@ namespace DressUpGame.UI
 
                 HorizontalLayoutGroup rowLayout = rowGo.AddComponent<HorizontalLayoutGroup>();
                 rowLayout.childAlignment = TextAnchor.MiddleCenter;
-                rowLayout.spacing = 0f;
+                rowLayout.spacing = GameRowSpacingReference;
                 rowLayout.padding = new RectOffset(0, 0, 0, 0);
                 rowLayout.childControlWidth = true;
                 rowLayout.childControlHeight = true;
@@ -246,6 +274,12 @@ namespace DressUpGame.UI
                 rowElement.preferredWidth = GetMenuColumnWidthReference();
 
                 existing = rowGo.transform;
+            }
+
+            HorizontalLayoutGroup layout = existing.GetComponent<HorizontalLayoutGroup>();
+            if (layout != null)
+            {
+                layout.spacing = GameRowSpacingReference;
             }
 
             LayoutElement existingRowLayout = existing.GetComponent<LayoutElement>();
@@ -263,7 +297,13 @@ namespace DressUpGame.UI
             moreGamesCard = existing.Find("MoreGamesCard");
             if (moreGamesCard != null)
             {
-                ResizeMenuCard(moreGamesCard, MoreGamesCardWidthReference);
+                ResizeMenuCard(moreGamesCard, GameRowCardWidthReference);
+            }
+
+            Transform memoryCard = existing.Find(MemoryGameCardName);
+            if (memoryCard != null)
+            {
+                ResizeMenuCard(memoryCard, GameRowCardWidthReference);
             }
 
             existing.SetSiblingIndex(column.Find(GameCardsRowName) != null ? 1 : 0);
@@ -272,8 +312,7 @@ namespace DressUpGame.UI
 
         private static float GetMenuColumnWidthReference()
         {
-            float gameRowWidth = GameRowCardWidthReference * 2f + GameRowSpacingReference;
-            return Mathf.Max(gameRowWidth, MoreGamesCardWidthReference);
+            return GameRowCardWidthReference * 2f + GameRowSpacingReference;
         }
 
         private static void ApplyMenuColumnWidth(Transform column)
@@ -499,6 +538,7 @@ namespace DressUpGame.UI
 
             Sprite gameSprite = LoadMenuSprite(GameButtonResourcePath);
             Sprite petGameSprite = LoadMenuSprite(PetGameButtonResourcePath);
+            Sprite memoryGameSprite = LoadMenuSprite(MemoryGameButtonResourcePath);
             Sprite moreGamesSprite = LoadMenuSprite(MoreGamesResourcePath);
 
             Transform gamesRow = EnsureGameCardsRow(columnGo.transform);
@@ -517,13 +557,27 @@ namespace DressUpGame.UI
 
             AddPetGameCard(gamesRow, petGameSprite);
 
+            Transform secondaryGamesRow = EnsureSecondaryGamesRow(columnGo.transform);
+
+            if (memoryGameSprite != null)
+            {
+                CreateMenuCard(
+                    secondaryGamesRow,
+                    memoryGameSprite,
+                    GameRowCardWidthReference,
+                    true,
+                    FrameColor,
+                    StartMemoryGame,
+                    showPlayHintBorder: false,
+                    layoutHostName: MemoryGameCardName);
+            }
+
             if (moreGamesSprite != null)
             {
-                Transform moreGamesRow = EnsureMoreGamesRow(columnGo.transform);
                 CreateMenuCard(
-                    moreGamesRow,
+                    secondaryGamesRow,
                     moreGamesSprite,
-                    MoreGamesCardWidthReference,
+                    GameRowCardWidthReference,
                     true,
                     FrameColor,
                     HandleMoreGamesClicked,
@@ -533,28 +587,22 @@ namespace DressUpGame.UI
 
         private void HandleMoreGamesClicked()
         {
-            if (isMoreGamesAdPending || isStartingGame)
+            if (isMoreGamesAdPending || isStartingGame || isStartingMemoryGame)
             {
                 return;
             }
 
-            StartCoroutine(ShowMoreGamesRewardedAdRoutine());
+            StartCoroutine(ShowMoreGamesInterstitialRoutine());
         }
 
-        private IEnumerator ShowMoreGamesRewardedAdRoutine()
+        private IEnumerator ShowMoreGamesInterstitialRoutine()
         {
             isMoreGamesAdPending = true;
 
-            bool rewarded = false;
-            yield return RewardedAdController.WaitForRewardRoutine(result => rewarded = result);
+            yield return BreakInterstitialAdController.WaitForBreakAdRoutine();
 
             GameplayPauseGuard.EnsureUnpaused();
             isMoreGamesAdPending = false;
-
-            if (!rewarded)
-            {
-                Debug.Log("MainMenuScreenController: More games rewarded ad was not completed.");
-            }
         }
 
         private static void CreateTopWelcomeBanner(Transform canvasRoot, Sprite sprite, float safeTop)
@@ -803,7 +851,7 @@ namespace DressUpGame.UI
 
         private void StartDressUpGame()
         {
-            if (isStartingGame || isStartingPetGame)
+            if (isStartingGame || isStartingPetGame || isStartingMemoryGame)
             {
                 return;
             }
@@ -815,7 +863,7 @@ namespace DressUpGame.UI
 
         private void StartPetGame()
         {
-            if (isStartingPetGame || isStartingGame)
+            if (isStartingPetGame || isStartingGame || isStartingMemoryGame)
             {
                 return;
             }
@@ -823,6 +871,17 @@ namespace DressUpGame.UI
             PetSaveManager.ClearAllPetProgress();
             isStartingPetGame = true;
             StartCoroutine(LoadGameplaySceneRoutine(PetSceneName, () => isStartingPetGame = false));
+        }
+
+        private void StartMemoryGame()
+        {
+            if (isStartingMemoryGame || isStartingGame || isStartingPetGame)
+            {
+                return;
+            }
+
+            isStartingMemoryGame = true;
+            StartCoroutine(LoadGameplaySceneRoutine(MemorySceneName, () => isStartingMemoryGame = false));
         }
 
         private IEnumerator ActivateMainSceneRoutine()

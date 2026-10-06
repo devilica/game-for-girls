@@ -2,6 +2,7 @@ using DressUpGame.Character;
 using DressUpGame.Data;
 using DressUpGame.Save;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DressUpGame.UI
 {
@@ -263,6 +264,26 @@ namespace DressUpGame.UI
                     customizer.SetBlush(item);
                     break;
             }
+        }
+
+        public bool TryHandleBackNavigation()
+        {
+            if (openingWizard == null)
+            {
+                openingWizard = FindAnyObjectByType<OpeningWizardController>();
+            }
+
+            if (openingWizard != null && openingWizard.IsWizardVisible)
+            {
+                if (openingWizard.TryGoToPreviousStep())
+                {
+                    return true;
+                }
+            }
+
+            GameplayPauseGuard.EnsureUnpaused();
+            SceneManager.LoadScene(MainMenuScreenController.MenuSceneName);
+            return true;
         }
 
 #if UNITY_EDITOR

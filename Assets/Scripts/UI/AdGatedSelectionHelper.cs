@@ -10,11 +10,20 @@ namespace DressUpGame.UI
     /// </summary>
     public static class AdGatedSelectionHelper
     {
+        private static bool gateInProgress;
+
+        public static bool IsGateInProgress => gateInProgress;
+
         public static void Run(MonoBehaviour host, int cardIndex, string itemId, Action applySelection)
         {
             if (!RewardedAdCardPolicy.IsAdGated(cardIndex, itemId))
             {
                 applySelection();
+                return;
+            }
+
+            if (gateInProgress || host == null)
+            {
                 return;
             }
 
@@ -34,17 +43,30 @@ namespace DressUpGame.UI
                 return;
             }
 
+            if (gateInProgress || host == null)
+            {
+                return;
+            }
+
             host.StartCoroutine(GateWithRewardedAd(applySelection));
         }
 
         private static IEnumerator GateWithRewardedAd(Action applySelection)
         {
-            bool unlocked = false;
-            yield return RewardedAdController.WaitForRewardRoutine(result => unlocked = result);
-
-            if (unlocked)
+            gateInProgress = true;
+            try
             {
-                applySelection();
+                bool unlocked = false;
+                yield return RewardedAdController.WaitForRewardRoutine(result => unlocked = result);
+
+                if (unlocked)
+                {
+                    applySelection();
+                }
+            }
+            finally
+            {
+                gateInProgress = false;
             }
         }
     }

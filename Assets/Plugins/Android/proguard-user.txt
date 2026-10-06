@@ -1,0 +1,43 @@
+# Unity player (required when launcher minify/R8 is enabled)
+-keep class bitter.jnibridge.** { *; }
+-keep class com.unity3d.player.** { *; }
+-keep class com.unity3d.plugin.** { *; }
+-keep class com.unity3d.androidplugin.** { *; }
+-keep class org.fmod.** { *; }
+
+# AndroidX App Startup + WorkManager (required for release R8; crash without these)
+-keep class androidx.startup.** { *; }
+-keep class androidx.work.** { *; }
+-keep class androidx.work.impl.** { *; }
+-keep class * extends androidx.work.Worker
+-keep class * extends androidx.work.ListenableWorker
+-keep class * extends androidx.work.InputMerger
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class *
+-keepclassmembers class * {
+    @androidx.room.* <methods>;
+}
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+# Google Mobile Ads (AdMob) + UMP + Next-Gen mobile ads SDK
+-keep class com.google.android.gms.ads.MobileAdsInitProvider { *; }
+-keep class com.google.android.gms.ads.** { *; }
+-keep class com.google.ads.** { *; }
+-keep class com.google.android.ump.** { *; }
+-keep class com.google.android.libraries.ads.** { *; }
+-keep class com.google.android.libraries.ads.mobile.sdk.** { *; }
+
+-keep class com.google.android.gms.internal.ads.** { *; }
+-dontwarn com.google.android.gms.internal.ads.**
+
+-keep class com.google.unity.ads.** { *; }
+-keep class com.google.unity.ads.nextgen.** { *; }
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+
+-dontwarn com.google.android.gms.**

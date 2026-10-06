@@ -26,7 +26,9 @@ namespace DressUpGame.Editor
                 "- Development Build: OFF\n" +
                 "- Script Debugging: OFF\n" +
                 "- Android Build Type: Release\n" +
-                "- Build App Bundle: ON\n\n" +
+                "- Build App Bundle: ON\n" +
+                "- Minify Release (R8): ON\n" +
+                "- Custom Launcher Gradle Template: ON\n\n" +
                 "Now run: Dress Up Game → Build Release AAB (Play Store)",
                 "OK");
         }
@@ -52,6 +54,49 @@ namespace DressUpGame.Editor
             EditorUserBuildSettings.buildScriptsOnly = false;
             EditorUserBuildSettings.buildAppBundle = true;
             EditorUserBuildSettings.androidBuildType = AndroidBuildType.Release;
+
+            ApplyAndroidReleasePlayerSettings();
+        }
+
+        /// <summary>
+        /// Release minify, ProGuard, and launcher Gradle template — safe for APK and AAB builds.
+        /// </summary>
+        public static void ApplyAndroidReleasePlayerSettings()
+        {
+            PlayerSettings.Android.minifyRelease = true;
+            PlayerSettings.Android.minifyDebug = false;
+            EnsureCustomGradleTemplateFlagsEnabled();
+        }
+
+        private static void EnsureCustomGradleTemplateFlagsEnabled()
+        {
+            Object[] projectSettingsAssets = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/ProjectSettings.asset");
+            if (projectSettingsAssets == null || projectSettingsAssets.Length == 0)
+            {
+                return;
+            }
+
+            SerializedObject serializedObject = new SerializedObject(projectSettingsAssets[0]);
+            bool changed = false;
+
+            SerializedProperty useCustomProguard = serializedObject.FindProperty("useCustomProguardFile");
+            if (useCustomProguard != null && !useCustomProguard.boolValue)
+            {
+                useCustomProguard.boolValue = true;
+                changed = true;
+            }
+
+            SerializedProperty useCustomLauncherGradle = serializedObject.FindProperty("useCustomLauncherGradleTemplate");
+            if (useCustomLauncherGradle != null && !useCustomLauncherGradle.boolValue)
+            {
+                useCustomLauncherGradle.boolValue = true;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            }
         }
 
         public static void ForceReleaseOnProfile(BuildProfile profile)

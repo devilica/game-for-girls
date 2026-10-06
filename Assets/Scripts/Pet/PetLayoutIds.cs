@@ -3,15 +3,16 @@ using System.Text.RegularExpressions;
 namespace DressUpGame.Pet
 {
     /// <summary>
-    /// Pet ids like pet_1_yellow share accessory layouts with their base pet (pet_1).
+    /// Pet ids like pet_1_dark_yellow share accessory layouts with their base pet (pet_1).
     /// </summary>
     public static class PetLayoutIds
     {
-        public static readonly string[] ColorSuffixes = { "yellow", "brown", "orange", "grey" };
+        private static readonly string ColorSuffixAlternation =
+            "dark_yellow|dark_orange|grey|black|brown|red|green";
 
         private static readonly Regex BasePetPattern = new Regex(@"^pet_(\d+)$", RegexOptions.IgnoreCase);
         private static readonly Regex ColorVariantPattern = new Regex(
-            @"^(pet_\d+)_(yellow|brown|orange|grey)$",
+            @"^(pet_\d+)_(" + ColorSuffixAlternation + ")$",
             RegexOptions.IgnoreCase);
 
         public static bool IsBasePetId(string petId) =>

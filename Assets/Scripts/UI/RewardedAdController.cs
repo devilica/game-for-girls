@@ -23,6 +23,7 @@ namespace DressUpGame.UI
         private bool showCompleted;
         private bool rewardGranted;
         private bool handlersRegistered;
+        private bool rewardedShowInProgress;
 #endif
 
         public static void EnsureExists()
@@ -102,28 +103,58 @@ namespace DressUpGame.UI
 #if UNITY_ANDROID || UNITY_IOS
         private IEnumerator ShowForRewardRoutine(Action<bool> onComplete)
         {
-            if (rewardedAd == null || !rewardedAd.CanShowAd())
-            {
-                Preload();
-                onComplete?.Invoke(true);
-                yield break;
-            }
-
-            showCompleted = false;
-            rewardGranted = false;
-            RegisterShowHandlers();
-
-            rewardedAd.Show(reward =>
-            {
-                rewardGranted = true;
-            });
-
-            while (!showCompleted)
+            while (rewardedShowInProgress)
             {
                 yield return null;
             }
 
-            onComplete?.Invoke(rewardGranted);
+            rewardedShowInProgress = true;
+            try
+            {
+                const float loadTimeoutSeconds = 10f;
+                float elapsed = 0f;
+                bool preloadRequested = false;
+
+                while ((rewardedAd == null || !rewardedAd.CanShowAd()) && elapsed < loadTimeoutSeconds)
+                {
+                    if (!preloadRequested)
+                    {
+                        Preload();
+                        preloadRequested = true;
+                    }
+
+                    elapsed += Time.unscaledDeltaTime;
+                    yield return null;
+                }
+
+                if (rewardedAd == null || !rewardedAd.CanShowAd())
+                {
+                    Debug.LogWarning(
+                        "Rewarded ad was not ready after preload timeout; granting selection without ad.");
+                    onComplete?.Invoke(true);
+                    yield break;
+                }
+
+                showCompleted = false;
+                rewardGranted = false;
+                RegisterShowHandlers();
+
+                rewardedAd.Show(reward =>
+                {
+                    rewardGranted = true;
+                });
+
+                while (!showCompleted)
+                {
+                    yield return null;
+                }
+
+                onComplete?.Invoke(rewardGranted);
+            }
+            finally
+            {
+                rewardedShowInProgress = false;
+            }
         }
 
         private void Preload()

@@ -123,16 +123,24 @@ namespace DressUpGame.UI
                 }
 
                 nativeAdSlot?.ApplyLayout();
-                nativeAdSlot?.SetVisible(true);
+                nativeAdSlot?.SetVisible(false);
 
                 BottomBannerAdController.RefreshVisibility();
                 BottomBannerAdController.BringToFront();
 
                 float breakEndTime = Time.unscaledTime + durationSeconds;
                 BreakNativeAdController nativeController = ResolveNativeAdController();
+                bool nativeAdShown = false;
                 if (nativeController != null)
                 {
-                    yield return nativeController.ShowForBreakRoutine(nativeAdSlot?.SlotRect);
+                    yield return nativeController.ShowForBreakRoutine(
+                        nativeAdSlot?.SlotRect,
+                        success => nativeAdShown = success);
+                }
+
+                if (nativeAdShown)
+                {
+                    nativeAdSlot?.SetVisible(true);
                 }
 
                 while (Time.unscaledTime < breakEndTime)

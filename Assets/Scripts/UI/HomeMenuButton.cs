@@ -17,6 +17,7 @@ namespace DressUpGame.UI
         private const string HomeIconResourcePath = "UI/menu/home";
         private const string MainSceneName = "MainScene";
         private const string PetSceneName = "PetScene";
+        private const string MemorySceneName = "MemoryScene";
 
         private static Sprite homeSprite;
 
@@ -152,7 +153,7 @@ namespace DressUpGame.UI
 
         private static bool IsGameplayScene(string sceneName)
         {
-            return sceneName == MainSceneName || sceneName == PetSceneName;
+            return sceneName == MainSceneName || sceneName == PetSceneName || sceneName == MemorySceneName;
         }
 
         private void RefreshIcon()
