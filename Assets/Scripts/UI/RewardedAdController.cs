@@ -43,7 +43,7 @@ namespace DressUpGame.UI
             EnsureExists();
             if (instance == null)
             {
-                onComplete?.Invoke(true);
+                onComplete?.Invoke(false);
                 yield break;
             }
 
@@ -111,6 +111,12 @@ namespace DressUpGame.UI
             rewardedShowInProgress = true;
             try
             {
+                if (!NetworkReachabilityUtility.IsInternetAvailable())
+                {
+                    onComplete?.Invoke(false);
+                    yield break;
+                }
+
                 const float loadTimeoutSeconds = 10f;
                 float elapsed = 0f;
                 bool preloadRequested = false;
@@ -129,9 +135,8 @@ namespace DressUpGame.UI
 
                 if (rewardedAd == null || !rewardedAd.CanShowAd())
                 {
-                    Debug.LogWarning(
-                        "Rewarded ad was not ready after preload timeout; granting selection without ad.");
-                    onComplete?.Invoke(true);
+                    Debug.LogWarning("Rewarded ad was not ready after preload timeout.");
+                    onComplete?.Invoke(false);
                     yield break;
                 }
 
@@ -144,9 +149,20 @@ namespace DressUpGame.UI
                     rewardGranted = true;
                 });
 
-                while (!showCompleted)
+                const float showTimeoutSeconds = 20f;
+                float showElapsed = 0f;
+                while (!showCompleted && showElapsed < showTimeoutSeconds)
                 {
+                    showElapsed += Time.unscaledDeltaTime;
                     yield return null;
+                }
+
+                if (!showCompleted)
+                {
+                    Debug.LogWarning("Rewarded ad show timed out.");
+                    FinishShow();
+                    onComplete?.Invoke(false);
+                    yield break;
                 }
 
                 onComplete?.Invoke(rewardGranted);

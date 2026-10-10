@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
 
+using DressUpGame.MysteryBox;
+
 namespace DressUpGame.UI
 {
     /// <summary>
@@ -20,6 +22,11 @@ namespace DressUpGame.UI
 
         public static bool IsAdGated(int zeroBasedIndex, string itemId = null)
         {
+            if (!string.IsNullOrEmpty(itemId) && MysteryUnlockStore.IsUnlocked(itemId))
+            {
+                return false;
+            }
+
             return IsAdGatedCardIndex(zeroBasedIndex) || IsOriginalDressId(itemId);
         }
     }

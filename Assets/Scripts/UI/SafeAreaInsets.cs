@@ -26,6 +26,22 @@ namespace DressUpGame.UI
             return GetInsetReferenceUnits(topInsetPixels, scaler);
         }
 
+        public static float GetLeftInsetReferenceUnits(CanvasScaler scaler = null)
+        {
+            return GetHorizontalInsetReferenceUnits(Screen.safeArea.x, scaler);
+        }
+
+        public static float GetRightInsetReferenceUnits(CanvasScaler scaler = null)
+        {
+            if (Screen.width <= 0)
+            {
+                return 0f;
+            }
+
+            float rightInsetPixels = Screen.width - Screen.safeArea.xMax;
+            return GetHorizontalInsetReferenceUnits(rightInsetPixels, scaler);
+        }
+
         /// <summary>
         /// Device safe-area bottom inset plus a minimum cushion for home indicators in editor/simulator.
         /// </summary>
@@ -52,6 +68,22 @@ namespace DressUpGame.UI
             if (scaler != null && scaler.uiScaleMode == CanvasScaler.ScaleMode.ScaleWithScreenSize)
             {
                 scale = scaler.referenceResolution.y / Screen.height;
+            }
+
+            return insetPixels * scale;
+        }
+
+        private static float GetHorizontalInsetReferenceUnits(float insetPixels, CanvasScaler scaler)
+        {
+            if (Screen.width <= 0)
+            {
+                return 0f;
+            }
+
+            float scale = 1080f / Screen.width;
+            if (scaler != null && scaler.uiScaleMode == CanvasScaler.ScaleMode.ScaleWithScreenSize)
+            {
+                scale = scaler.referenceResolution.x / Screen.width;
             }
 
             return insetPixels * scale;

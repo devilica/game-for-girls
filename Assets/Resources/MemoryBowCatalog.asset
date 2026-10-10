@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: MemoryBowCatalog
   m_EditorClassIdentifier: Assembly-CSharp::DressUpGame.Memory.MemoryBowCatalog
   bows:
-  - {fileID: 21300000, guid: c91ea115dcfdbb14fbd77337d8de2442, type: 3}
-  - {fileID: 21300000, guid: ac1891a9ce6f5704db3b5814c195de71, type: 3}
-  - {fileID: 21300000, guid: 035fa29d959f99546a54148a35c51375, type: 3}
-  - {fileID: 21300000, guid: 03453b708d606d2469b5b3236ea49ceb, type: 3}
-  - {fileID: 21300000, guid: c157ec9722051f44cb30714f2082f26b, type: 3}
-  - {fileID: 21300000, guid: f717b2a11de501a48bc0a3678ff21d24, type: 3}
-  - {fileID: 21300000, guid: cf32f9879388ab544836ffb08a9aadd0, type: 3}
-  - {fileID: 21300000, guid: 2e77f349b48ee3a498f6272a84f8f61d, type: 3}
+  - {fileID: 21300000, guid: e08f06a85a767384fa53b2813ecfb68b, type: 3}
+  - {fileID: 21300000, guid: 7db1649a124b1e2409c410eb5d3d1992, type: 3}
+  - {fileID: 21300000, guid: 177187b6e7b1f0743a627bac6fc77ad7, type: 3}
+  - {fileID: 21300000, guid: d0eb7c2559189434589b6857dcbff153, type: 3}
+  - {fileID: 21300000, guid: db405fc9519b5c14da1b9799f190c6c6, type: 3}
+  - {fileID: 21300000, guid: 1b3bfce22df3e15489318067a6bfb436, type: 3}
+  - {fileID: 21300000, guid: 7af46343cb2883e4fb25e0a4bf40e6da, type: 3}
+  - {fileID: 21300000, guid: c3c1381df842abe4c8cabe344440f282, type: 3}
   - {fileID: 21300000, guid: 289909c005f85004299cb9f03921f9e0, type: 3}
   - {fileID: 21300000, guid: 5f4b3165fc8aafc4cba6b866c0fee31b, type: 3}
   - {fileID: 21300000, guid: 72ad0507022bdda4b99fd5d0b2dcfe7a, type: 3}

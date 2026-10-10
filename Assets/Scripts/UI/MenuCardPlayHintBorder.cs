@@ -1,74 +1,143 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DressUpGame.UI
 {
     /// <summary>
-    /// Soft blinking rings around the main play card on the menu hub.
+    /// Memory-style pink-to-gold border pulse on the main play card in the menu hub.
     /// </summary>
     public class MenuCardPlayHintBorder : MonoBehaviour
     {
-        private const float PulsePeriodSeconds = 0.9f;
-        private const float ScalePulseAmount = 0.045f;
+        private const float ContentInsetPixels = 6f;
+        private const string BorderObjectName = "PlayHintBorder";
+        private const string LegacyOuterRingName = "OuterBlinkRing";
+        private const string LegacyInnerRingName = "InnerBlinkRing";
 
-        private static readonly Color OuterBright = new Color(1f, 0.32f, 0.68f, 0.98f);
-        private static readonly Color OuterDim = new Color(1f, 0.62f, 0.82f, 0.12f);
-        private static readonly Color InnerBright = new Color(1f, 0.88f, 0.28f, 0.92f);
-        private static readonly Color InnerDim = new Color(1f, 0.94f, 0.55f, 0.1f);
-
-        private Image outerRing;
-        private Image innerRing;
-        private float phase;
+        private Image borderImage;
+        private Coroutine pulseRoutine;
 
         public void Build()
         {
-            if (outerRing != null)
+            DestroyLegacyRings();
+
+            Transform content = transform.Find("CardContent");
+            if (content != null)
+            {
+                RectTransform contentRect = content as RectTransform;
+                if (contentRect != null)
+                {
+                    contentRect.anchorMin = Vector2.zero;
+                    contentRect.anchorMax = Vector2.one;
+                    contentRect.offsetMin = new Vector2(ContentInsetPixels, ContentInsetPixels);
+                    contentRect.offsetMax = new Vector2(-ContentInsetPixels, -ContentInsetPixels);
+                }
+            }
+
+            Transform existingBorder = transform.Find(BorderObjectName);
+            if (existingBorder != null)
+            {
+                borderImage = existingBorder.GetComponent<Image>();
+                if (borderImage != null)
+                {
+                    borderImage.color = UiBorderCelebrationStyle.BaseBorderColor;
+                    existingBorder.SetAsFirstSibling();
+                    return;
+                }
+            }
+
+            GameObject borderGo = new GameObject(BorderObjectName);
+            borderGo.transform.SetParent(transform, false);
+            borderGo.transform.SetAsFirstSibling();
+
+            RectTransform borderRect = borderGo.AddComponent<RectTransform>();
+            borderRect.anchorMin = Vector2.zero;
+            borderRect.anchorMax = Vector2.one;
+            borderRect.offsetMin = Vector2.zero;
+            borderRect.offsetMax = Vector2.zero;
+
+            borderImage = borderGo.AddComponent<Image>();
+            borderImage.sprite = UiRoundSpriteUtility.GetRoundedSquareSprite();
+            borderImage.type = Image.Type.Sliced;
+            borderImage.color = UiBorderCelebrationStyle.BaseBorderColor;
+            borderImage.raycastTarget = false;
+        }
+
+        private void OnEnable()
+        {
+            if (borderImage == null)
+            {
+                Build();
+            }
+
+            StartPulse();
+        }
+
+        private void OnDisable()
+        {
+            StopPulse();
+        }
+
+        private void StartPulse()
+        {
+            StopPulse();
+            if (borderImage == null)
             {
                 return;
             }
 
-            Sprite ringSprite = UiRoundSpriteUtility.GetRoundedSquareSprite();
-            outerRing = CreateRing("OuterBlinkRing", ringSprite, 12f, 12f);
-            innerRing = CreateRing("InnerBlinkRing", ringSprite, 5f, 5f);
-            outerRing.transform.SetAsFirstSibling();
-            innerRing.transform.SetSiblingIndex(1);
+            pulseRoutine = StartCoroutine(BorderPulseRoutine());
         }
 
-        private void Update()
+        private void StopPulse()
         {
-            if (outerRing == null || innerRing == null)
+            if (pulseRoutine != null)
+            {
+                StopCoroutine(pulseRoutine);
+                pulseRoutine = null;
+            }
+
+            if (borderImage != null)
+            {
+                borderImage.color = UiBorderCelebrationStyle.BaseBorderColor;
+            }
+        }
+
+        private IEnumerator BorderPulseRoutine()
+        {
+            while (true)
+            {
+                float t = Mathf.PingPong(Time.unscaledTime / UiBorderCelebrationStyle.PulsePeriodSeconds, 1f);
+                if (borderImage != null)
+                {
+                    borderImage.color = Color.Lerp(
+                        UiBorderCelebrationStyle.BaseBorderColor,
+                        UiBorderCelebrationStyle.AccentBorderColor,
+                        t);
+                }
+
+                yield return null;
+            }
+        }
+
+        private void DestroyLegacyRings()
+        {
+            if (!transform)
             {
                 return;
             }
 
-            phase += Time.unscaledDeltaTime;
-            float pulse = (Mathf.Sin(phase * (Mathf.PI * 2f) / PulsePeriodSeconds) + 1f) * 0.5f;
-            float blink = pulse * pulse;
+            Transform outer = transform.Find(LegacyOuterRingName);
+            if (outer)
+            {
+                Destroy(outer.gameObject);
+            }
 
-            outerRing.color = Color.Lerp(OuterDim, OuterBright, blink);
-            innerRing.color = Color.Lerp(InnerDim, InnerBright, blink);
-
-            float scale = 1f + blink * ScalePulseAmount;
-            outerRing.rectTransform.localScale = new Vector3(scale, scale, 1f);
-            innerRing.rectTransform.localScale = Vector3.one;
-        }
-
-        private Image CreateRing(string name, Sprite sprite, float expandX, float expandY)
-        {
-            GameObject ringGo = new GameObject(name);
-            ringGo.transform.SetParent(transform, false);
-
-            RectTransform rect = ringGo.AddComponent<RectTransform>();
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(-expandX, -expandY);
-            rect.offsetMax = new Vector2(expandX, expandY);
-
-            Image image = ringGo.AddComponent<Image>();
-            image.sprite = sprite;
-            image.type = Image.Type.Simple;
-            image.raycastTarget = false;
-            return image;
+            Transform inner = transform.Find(LegacyInnerRingName);
+            if (inner)
+            {
+                Destroy(inner.gameObject);
+            }
         }
     }
 }

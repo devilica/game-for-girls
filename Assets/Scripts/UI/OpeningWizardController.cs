@@ -282,6 +282,11 @@ namespace DressUpGame.UI
             bool wasPaused = Time.timeScale == 0f;
             GameplayPauseGuard.EnsureUnpaused();
 
+            if (wasPaused)
+            {
+                AdGatedSelectionHelper.ResetGate();
+            }
+
             if (!wasPaused || !isTransitioning)
             {
                 return;

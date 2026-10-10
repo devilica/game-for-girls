@@ -14,6 +14,11 @@ namespace DressUpGame.UI
 
         public static bool IsGateInProgress => gateInProgress;
 
+        public static void ResetGate()
+        {
+            gateInProgress = false;
+        }
+
         public static void Run(MonoBehaviour host, int cardIndex, string itemId, Action applySelection)
         {
             if (!RewardedAdCardPolicy.IsAdGated(cardIndex, itemId))
@@ -22,7 +27,7 @@ namespace DressUpGame.UI
                 return;
             }
 
-            if (gateInProgress || host == null)
+            if (!TryBeginAdGatedSelection(host))
             {
                 return;
             }
@@ -43,12 +48,28 @@ namespace DressUpGame.UI
                 return;
             }
 
-            if (gateInProgress || host == null)
+            if (!TryBeginAdGatedSelection(host))
             {
                 return;
             }
 
             host.StartCoroutine(GateWithRewardedAd(applySelection));
+        }
+
+        private static bool TryBeginAdGatedSelection(MonoBehaviour host)
+        {
+            if (gateInProgress || host == null)
+            {
+                return false;
+            }
+
+            if (!NetworkReachabilityUtility.IsInternetAvailable())
+            {
+                PlayerNoticeToast.ShowAdUnlockBlocked();
+                return false;
+            }
+
+            return true;
         }
 
         private static IEnumerator GateWithRewardedAd(Action applySelection)
@@ -62,6 +83,10 @@ namespace DressUpGame.UI
                 if (unlocked)
                 {
                     applySelection();
+                }
+                else
+                {
+                    PlayerNoticeToast.ShowAdUnlockFailed();
                 }
             }
             finally

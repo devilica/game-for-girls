@@ -25,6 +25,8 @@ namespace DressUpGame.Editor
 
             GenerateMemoryBowCatalogTool.RelocateMemoryGameResources();
             SyncMemoryBowSpritesTool.SyncMemoryBowSpritesToResources();
+            MemoryHeaderSpriteImportTool.EnsureMemoryHeaderSpriteReady();
+            AssetDatabase.Refresh();
 
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
@@ -76,6 +78,14 @@ namespace DressUpGame.Editor
 
             RectTransform canvasRect = canvasGo.GetComponent<RectTransform>();
 
+            Sprite headerSprite = MemoryHeaderSpriteImportTool.LoadUiSprite(MemoryHeaderSpriteImportTool.HeaderResourcesPath);
+            if (headerSprite == null)
+            {
+                headerSprite = MemoryHeaderSpriteImportTool.LoadUiSprite(MemoryHeaderSpriteImportTool.HeaderSpritePath);
+            }
+
+            CreateHeaderBanner(canvasRect, headerSprite);
+
             GameObject boardGo = new GameObject("MemoryBoard");
             boardGo.transform.SetParent(canvasRect, false);
             RectTransform boardRect = boardGo.AddComponent<RectTransform>();
@@ -125,6 +135,22 @@ namespace DressUpGame.Editor
             so.ApplyModifiedPropertiesWithoutUndo();
 
             return canvas;
+        }
+
+        private static void CreateHeaderBanner(RectTransform canvasRect, Sprite headerSprite)
+        {
+            GameObject headerGo = new GameObject("HeaderBanner");
+            headerGo.transform.SetParent(canvasRect, false);
+            RectTransform rect = headerGo.AddComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.pivot = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(0f, -32f);
+            rect.sizeDelta = new Vector2(900f, 200f);
+            Image image = headerGo.AddComponent<Image>();
+            image.sprite = headerSprite;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
         }
 
         private static void EnsureEventSystem()

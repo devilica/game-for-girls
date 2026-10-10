@@ -3,11 +3,23 @@
   "WorkspaceRootPath": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|c:\\users\\korisnik\\onedrive\\desktop\\projects\\game-for-girls\\assets\\scripts\\memory\\memorygamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|c:\\users\\korisnik\\onedrive\\desktop\\projects\\game-for-girls\\assets\\scripts\\mysterybox\\mysteryboxui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\mysterybox\\mysteryboxui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|c:\\users\\korisnik\\onedrive\\desktop\\projects\\game-for-girls\\assets\\scripts\\mysterybox\\mysteryopenresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\mysterybox\\mysteryopenresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\scripts\\ui\\mainmenuscreencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ui\\mainmenuscreencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\scripts\\memory\\memorygamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9F9EF43A-DB6C-CC84-7FF2-F05838EA0680}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\memory\\memorygamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|c:\\users\\korisnik\\onedrive\\desktop\\projects\\game-for-girls\\assets\\editor\\androidplaystorebuildsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\assets\\editor\\androidplaystorebuildsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EA302C2D-A43B-45D0-B534-AD0097408D08}|Assembly-CSharp-Editor.csproj|solutionrelative:assets\\editor\\androidplaystorebuildsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -47,6 +59,44 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "MysteryBoxUI.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\MysteryBox\\MysteryBoxUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\MysteryBox\\MysteryBoxUI.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\MysteryBox\\MysteryBoxUI.cs",
+              "RelativeToolTip": "Assets\\Scripts\\MysteryBox\\MysteryBoxUI.cs",
+              "ViewState": "AgIAAOACAAAAAAAAAAAwwOsCAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T08:45:23.869Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MysteryOpenResult.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\MysteryBox\\MysteryOpenResult.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\MysteryBox\\MysteryOpenResult.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\MysteryBox\\MysteryOpenResult.cs",
+              "RelativeToolTip": "Assets\\Scripts\\MysteryBox\\MysteryOpenResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T08:22:50.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainMenuScreenController.cs",
+              "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\MainMenuScreenController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\MainMenuScreenController.cs",
+              "ToolTip": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\MainMenuScreenController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\UI\\MainMenuScreenController.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAwwEIAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-07T07:13:25.447Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "MemoryGameController.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\Memory\\MemoryGameController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Memory\\MemoryGameController.cs",
@@ -54,12 +104,11 @@
               "RelativeToolTip": "Assets\\Scripts\\Memory\\MemoryGameController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-05T12:28:03.761Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-05T12:28:03.761Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "AndroidPlayStoreBuildSettings.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\AndroidPlayStoreBuildSettings.cs",
               "RelativeDocumentMoniker": "Assets\\Editor\\AndroidPlayStoreBuildSettings.cs",
@@ -67,12 +116,11 @@
               "RelativeToolTip": "Assets\\Editor\\AndroidPlayStoreBuildSettings.cs",
               "ViewState": "AgIAAC8AAAAAAAAAAAAwwDoAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-29T10:07:46.845Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-29T10:07:46.845Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "GeneratePetRecolorVariantsTool.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\GeneratePetRecolorVariantsTool.cs",
               "RelativeDocumentMoniker": "Assets\\Editor\\GeneratePetRecolorVariantsTool.cs",
@@ -84,7 +132,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "MobileAdsInitializer.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\MobileAdsInitializer.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\MobileAdsInitializer.cs",
@@ -96,7 +144,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "GenerateNecklaceColorsTool.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\GenerateNecklaceColorsTool.cs",
               "RelativeDocumentMoniker": "Assets\\Editor\\GenerateNecklaceColorsTool.cs",
@@ -108,7 +156,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "SpriteAssetLinker.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Editor\\SpriteAssetLinker.cs",
               "RelativeDocumentMoniker": "Assets\\Editor\\SpriteAssetLinker.cs",
@@ -120,7 +168,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "PortraitUILayout.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\PortraitUILayout.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\PortraitUILayout.cs",
@@ -132,7 +180,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "CategoryBarController.cs",
               "DocumentMoniker": "C:\\Users\\Korisnik\\OneDrive\\Desktop\\Projects\\game-for-girls\\Assets\\Scripts\\UI\\CategoryBarController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\UI\\CategoryBarController.cs",

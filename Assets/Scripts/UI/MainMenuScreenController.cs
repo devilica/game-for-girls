@@ -1,4 +1,5 @@
 using System.Collections;
+using DressUpGame.MysteryBox;
 using DressUpGame.Pet;
 using DressUpGame.Save;
 using UnityEngine;
@@ -17,10 +18,12 @@ namespace DressUpGame.UI
         private const string MainSceneName = "MainScene";
         private const string PetSceneName = "PetScene";
         private const string MemorySceneName = "MemoryScene";
+        private const string MysteryBoxSceneName = MysteryBoxController.MysteryBoxSceneName;
         private const string GameButtonResourcePath = "UI/menu/game_1";
         private const string PetGameButtonResourcePath = "UI/menu/game_2";
         private const string MemoryGameButtonResourcePath = "UI/menu/game_3";
-        private const string MoreGamesResourcePath = "UI/menu/more_games";
+        private const string MysteryBoxGameButtonResourcePath = "UI/menu/game_4";
+        private const string MoreGamesResourcePath = "UI/menu/banner-more";
         private const string BackgroundResourcePath = "UI/menu/background";
         private const string WelcomeResourcePath = "UI/menu/welcome";
 
@@ -31,7 +34,10 @@ namespace DressUpGame.UI
         private const float GameRowSpacingReference = 20f;
         private const string GameCardsRowName = "GameCardsRow";
         private const string MoreGamesRowName = "MoreGamesRow";
+        private const string MoreGamesBannerRowName = "MoreGamesBannerRow";
+        private const float MoreGamesBannerAspectHeightOverWidth = 9f / 16f;
         private const string MemoryGameCardName = "MemoryGameCard";
+        private const string MysteryBoxGameCardName = "MysteryBoxGameCard";
         private const float CardSpacingReference = 28f;
         private const float CardInnerPaddingReference = 0f;
         private const float MenuButtonsVerticalOffsetReference = -140f;
@@ -44,14 +50,232 @@ namespace DressUpGame.UI
         private bool isStartingGame;
         private bool isStartingPetGame;
         private bool isStartingMemoryGame;
+        private bool isStartingMysteryBoxGame;
         private bool isMoreGamesAdPending;
+        private Coroutine deferredMenuLayoutRebuild;
+
+        private static float? cachedStandardGameRowCardHeight;
+        private static bool menuUiBuildInProgress;
 
         private void Awake()
         {
             EnsureCamera();
             EnsureEventSystem();
             Canvas canvas = EnsureCanvas();
-            BuildMenu(canvas.transform);
+            PrepareStaleMainMenuTeardown(canvas.transform);
+
+            if (menuUiBuildInProgress)
+            {
+                return;
+            }
+
+            menuUiBuildInProgress = true;
+            try
+            {
+                BuildMenu(canvas.transform);
+            }
+            finally
+            {
+                menuUiBuildInProgress = false;
+            }
+        }
+
+        /// <summary>
+        /// Destroys and rebuilds menu UI (used after layout changes). Safe in Play Mode from editor menu.
+        /// </summary>
+        public void ForceReloadMenuLayout()
+        {
+            Canvas canvas = FindAnyObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                return;
+            }
+
+            ClearMainMenuUiForRebuild(canvas.transform, destroyAllRoots: true);
+            menuUiBuildInProgress = true;
+            try
+            {
+                BuildMenu(canvas.transform);
+            }
+            finally
+            {
+                menuUiBuildInProgress = false;
+            }
+
+            StampMenuLayoutVersion(canvas.transform);
+            ApplyMenuLayout();
+            EnsureMenuCardsLayoutOnExistingMenu();
+            RebuildMainMenuLayoutImmediate(canvas.transform);
+        }
+
+        private static void StampMenuLayoutVersion(Transform canvasRoot)
+        {
+            Transform root = canvasRoot.Find("MainMenuRoot");
+            if (MainMenuLayoutMarker.HasMoreGamesBanner(root))
+            {
+                MainMenuLayoutMarker.Stamp(root);
+            }
+        }
+
+        private static void PrepareStaleMainMenuTeardown(Transform canvasRoot)
+        {
+            if (!canvasRoot)
+            {
+                return;
+            }
+
+            bool hasStaleRoot = false;
+            for (int i = 0; i < canvasRoot.childCount; i++)
+            {
+                Transform child = canvasRoot.GetChild(i);
+                if (!child || child.name != "MainMenuRoot")
+                {
+                    continue;
+                }
+
+                if (!MainMenuLayoutMarker.IsCurrent(child))
+                {
+                    hasStaleRoot = true;
+                    break;
+                }
+            }
+
+            if (hasStaleRoot)
+            {
+                ClearMainMenuUiForRebuild(canvasRoot, destroyAllRoots: true);
+            }
+        }
+
+        private static void ClearMainMenuUiForRebuild(Transform canvasRoot, bool destroyAllRoots)
+        {
+            if (!canvasRoot)
+            {
+                return;
+            }
+
+            Canvas canvas = canvasRoot.GetComponent<Canvas>();
+            bool canvasWasEnabled = canvas != null && canvas.enabled;
+            if (canvas != null)
+            {
+                canvas.enabled = false;
+            }
+
+            try
+            {
+                for (int i = canvasRoot.childCount - 1; i >= 0; i--)
+                {
+                    Transform child = canvasRoot.GetChild(i);
+                    if (!child || child.name != "MainMenuRoot")
+                    {
+                        continue;
+                    }
+
+                    if (destroyAllRoots || !MainMenuLayoutMarker.IsCurrent(child))
+                    {
+                        Object.DestroyImmediate(child.gameObject);
+                    }
+                }
+
+                Canvas.ForceUpdateCanvases();
+            }
+            finally
+            {
+                if (canvas != null)
+                {
+                    canvas.enabled = canvasWasEnabled;
+                }
+            }
+        }
+
+        private static void DestroyMenuUi(Transform canvasRoot, bool immediate = false)
+        {
+            if (immediate)
+            {
+                ClearMainMenuUiForRebuild(canvasRoot, destroyAllRoots: true);
+                return;
+            }
+
+            Transform root = canvasRoot.Find("MainMenuRoot");
+            if (!root)
+            {
+                return;
+            }
+
+            Object.Destroy(root.gameObject);
+        }
+
+        private static void RebuildMainMenuLayoutImmediate(Transform canvasRoot)
+        {
+            if (!canvasRoot)
+            {
+                return;
+            }
+
+            Transform column = canvasRoot.Find("MainMenuRoot");
+            if (column is RectTransform columnRect)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(columnRect);
+            }
+        }
+
+        private static Transform FindMenuCardDeep(Transform searchRoot, string cardName)
+        {
+            if (!searchRoot || string.IsNullOrEmpty(cardName))
+            {
+                return null;
+            }
+
+            if (searchRoot.name == cardName)
+            {
+                return searchRoot;
+            }
+
+            for (int i = 0; i < searchRoot.childCount; i++)
+            {
+                Transform child = searchRoot.GetChild(i);
+                if (!child)
+                {
+                    continue;
+                }
+
+                Transform found = FindMenuCardDeep(child, cardName);
+                if (found)
+                {
+                    return found;
+                }
+            }
+
+            return null;
+        }
+
+        private static bool TryReparentMenuCard(Transform card, Transform parent)
+        {
+            if (!card || !parent || card.parent == parent)
+            {
+                return card && parent;
+            }
+
+            card.SetParent(parent, false);
+            return true;
+        }
+
+        private static float GetStandardGameRowCardHeight()
+        {
+            if (cachedStandardGameRowCardHeight.HasValue)
+            {
+                return cachedStandardGameRowCardHeight.Value;
+            }
+
+            Sprite refSprite = LoadMenuSprite(GameButtonResourcePath);
+            if (refSprite == null)
+            {
+                cachedStandardGameRowCardHeight = GameRowCardWidthReference;
+                return cachedStandardGameRowCardHeight.Value;
+            }
+
+            float aspect = refSprite.rect.height / refSprite.rect.width;
+            cachedStandardGameRowCardHeight = GameRowCardWidthReference * aspect;
+            return cachedStandardGameRowCardHeight.Value;
         }
 
         private void Start()
@@ -90,50 +314,50 @@ namespace DressUpGame.UI
             }
 
             Transform gamesRow = EnsureGameCardsRow(column);
-            Transform playCard = column.Find("PlayGameCard");
-            if (playCard == null)
-            {
-                playCard = gamesRow.Find("PlayGameCard");
-            }
+            Transform playCard = FindMenuCardDeep(column, "PlayGameCard");
 
-            if (playCard != null && playCard.parent != gamesRow)
-            {
-                playCard.SetParent(gamesRow, false);
-            }
+            TryReparentMenuCard(playCard, gamesRow);
 
-            Transform petCard = column.Find("PetGameCard") ?? gamesRow.Find("PetGameCard");
+            Transform petCard = FindMenuCardDeep(column, "PetGameCard");
             Sprite petGameSprite = LoadMenuSprite(PetGameButtonResourcePath);
 
-            if (petCard != null && petGameSprite != null && petCard.Find("CardContent/Art") == null)
+            if (petCard && petGameSprite != null && petCard.Find("CardContent/Art") == null)
             {
                 Object.Destroy(petCard.gameObject);
                 petCard = null;
             }
 
-            if (playCard != null)
+            if (playCard)
             {
-                ResizeMenuCard(playCard, GameRowCardWidthReference);
+                TryReparentMenuCard(playCard, gamesRow);
+                ResizeGameRowMenuCard(playCard);
                 EnsurePlayHintBorder(playCard.gameObject, enabled: true);
             }
 
-            if (petCard != null)
+            if (petCard)
             {
-                if (petCard.parent != gamesRow)
-                {
-                    petCard.SetParent(gamesRow, false);
-                }
-
-                ResizeMenuCard(petCard, GameRowCardWidthReference);
+                TryReparentMenuCard(petCard, gamesRow);
+                ResizeGameRowMenuCard(petCard);
                 EnsurePlayHintBorder(petCard.gameObject, enabled: false);
             }
-            else if (playCard != null)
+            else if (playCard)
             {
                 AddPetGameCard(gamesRow, petGameSprite);
                 playCard.SetAsFirstSibling();
             }
 
             Transform secondaryRow = EnsureSecondaryGamesRow(column);
-            Transform memoryCardExisting = secondaryRow.Find(MemoryGameCardName);
+            Transform moreGamesBannerRow = EnsureMoreGamesBannerRow(column);
+            if (secondaryRow == null)
+            {
+                EnsureMoreGamesBannerOnColumn(column);
+                SetMenuRowOrder(column);
+                ScheduleDeferredMenuLayoutRebuild(canvas.transform);
+                return;
+            }
+
+            Transform memoryCardExisting = FindMenuCardDeep(column, MemoryGameCardName);
+            TryReparentMenuCard(memoryCardExisting, secondaryRow);
             Sprite memoryMenuSprite = LoadMenuSprite(MemoryGameButtonResourcePath);
             if (memoryCardExisting == null && memoryMenuSprite != null)
             {
@@ -151,6 +375,22 @@ namespace DressUpGame.UI
                 {
                     memoryCardExisting.SetAsFirstSibling();
                 }
+            }
+
+            Transform mysteryCardExisting = FindMenuCardDeep(column, MysteryBoxGameCardName);
+            TryReparentMenuCard(mysteryCardExisting, secondaryRow);
+            Sprite mysteryMenuSprite = LoadMenuSprite(MysteryBoxGameButtonResourcePath);
+            if (mysteryCardExisting == null && mysteryMenuSprite != null)
+            {
+                CreateMenuCard(
+                    secondaryRow,
+                    mysteryMenuSprite,
+                    GameRowCardWidthReference,
+                    true,
+                    FrameColor,
+                    StartMysteryBoxGame,
+                    showPlayHintBorder: false,
+                    layoutHostName: MysteryBoxGameCardName);
             }
 
             ApplyMenuColumnWidth(column);
@@ -172,10 +412,109 @@ namespace DressUpGame.UI
                 RewireMenuCardButton(memoryCardExisting, StartMemoryGame);
             }
 
-            Transform moreGamesCard = secondaryRow?.Find("MoreGamesCard") ?? column.Find("MoreGamesCard");
-            if (moreGamesCard != null)
+            mysteryCardExisting = secondaryRow?.Find(MysteryBoxGameCardName);
+            if (mysteryCardExisting != null)
             {
-                RewireMenuCardButton(moreGamesCard, HandleMoreGamesClicked);
+                RewireMenuCardButton(mysteryCardExisting, StartMysteryBoxGame);
+            }
+
+            if (memoryCardExisting != null)
+            {
+                ResizeGameRowMenuCard(memoryCardExisting);
+            }
+
+            if (mysteryCardExisting != null)
+            {
+                ResizeGameRowMenuCard(mysteryCardExisting);
+            }
+
+            EnsureMoreGamesBannerOnColumn(column);
+
+            SetMenuRowOrder(column);
+            ScheduleDeferredMenuLayoutRebuild(canvas.transform);
+        }
+
+        private void EnsureMoreGamesBannerPresent()
+        {
+            Canvas canvas = FindAnyObjectByType<Canvas>();
+            if (canvas == null)
+            {
+                return;
+            }
+
+            Transform column = canvas.transform.Find("MainMenuRoot");
+            if (!column)
+            {
+                return;
+            }
+
+            EnsureMoreGamesBannerOnColumn(column);
+        }
+
+        private void EnsureMoreGamesBannerOnColumn(Transform column)
+        {
+            if (!column)
+            {
+                return;
+            }
+
+            Transform moreGamesBannerRow = EnsureMoreGamesBannerRow(column);
+            Transform moreGamesCard = moreGamesBannerRow.Find("MoreGamesCard");
+            if (!moreGamesCard)
+            {
+                moreGamesCard = FindMenuCardDeep(column, "MoreGamesCard");
+            }
+
+            TryReparentMenuCard(moreGamesCard, moreGamesBannerRow);
+
+            Sprite moreGamesSprite = LoadMenuSprite(MoreGamesResourcePath);
+            if (!moreGamesSprite)
+            {
+                Debug.LogError(
+                    "MainMenuScreenController: More Games banner sprite missing at Resources/UI/menu/banner-more. " +
+                    "Run Dress Up Game → Fix Menu Button Sprites, then Reload Main Menu Layout.");
+                return;
+            }
+
+            if (!moreGamesCard)
+            {
+                CreateMoreGamesBannerCard(moreGamesBannerRow, moreGamesSprite, HandleMoreGamesClicked);
+                moreGamesCard = moreGamesBannerRow.Find("MoreGamesCard");
+            }
+
+            if (!moreGamesCard)
+            {
+                return;
+            }
+
+            TryReparentMenuCard(moreGamesCard, moreGamesBannerRow);
+            UpgradeMoreGamesBannerCard(moreGamesCard, moreGamesSprite, HandleMoreGamesClicked);
+            ResizeMoreGamesBanner(moreGamesCard);
+            RewireMenuCardButton(moreGamesCard, HandleMoreGamesClicked);
+        }
+
+        private void ScheduleDeferredMenuLayoutRebuild(Transform canvasRoot)
+        {
+            if (canvasRoot == null)
+            {
+                return;
+            }
+
+            if (deferredMenuLayoutRebuild != null)
+            {
+                StopCoroutine(deferredMenuLayoutRebuild);
+            }
+
+            deferredMenuLayoutRebuild = StartCoroutine(DeferredMenuLayoutRebuildRoutine(canvasRoot));
+        }
+
+        private IEnumerator DeferredMenuLayoutRebuildRoutine(Transform canvasRoot)
+        {
+            yield return null;
+            deferredMenuLayoutRebuild = null;
+            if (canvasRoot != null)
+            {
+                RebuildMainMenuLayoutImmediate(canvasRoot);
             }
         }
 
@@ -186,7 +525,12 @@ namespace DressUpGame.UI
                 return;
             }
 
-            Button button = cardRoot.Find("CardContent")?.GetComponent<Button>();
+            Button button = cardRoot.Find("BannerArt")?.GetComponent<Button>();
+            if (button == null)
+            {
+                button = cardRoot.Find("CardContent")?.GetComponent<Button>();
+            }
+
             if (button == null)
             {
                 return;
@@ -243,7 +587,7 @@ namespace DressUpGame.UI
             LayoutElement rowElement = rowGo.AddComponent<LayoutElement>();
             rowElement.preferredWidth = GameRowCardWidthReference * 2f + GameRowSpacingReference;
 
-            Transform playCard = column.Find("PlayGameCard");
+            Transform playCard = FindMenuCardDeep(column, "PlayGameCard");
             if (playCard != null)
             {
                 playCard.SetParent(rowGo.transform, false);
@@ -255,8 +599,13 @@ namespace DressUpGame.UI
 
         private static Transform EnsureSecondaryGamesRow(Transform column)
         {
+            if (!column)
+            {
+                return null;
+            }
+
             Transform existing = column.Find(MoreGamesRowName);
-            if (existing == null)
+            if (!existing)
             {
                 GameObject rowGo = new GameObject(MoreGamesRowName);
                 rowGo.transform.SetParent(column, false);
@@ -271,7 +620,7 @@ namespace DressUpGame.UI
                 rowLayout.childForceExpandHeight = false;
 
                 LayoutElement rowElement = rowGo.AddComponent<LayoutElement>();
-                rowElement.preferredWidth = GetMenuColumnWidthReference();
+                rowElement.preferredWidth = GameRowCardWidthReference * 2f + GameRowSpacingReference;
 
                 existing = rowGo.transform;
             }
@@ -282,32 +631,299 @@ namespace DressUpGame.UI
                 layout.spacing = GameRowSpacingReference;
             }
 
-            LayoutElement existingRowLayout = existing.GetComponent<LayoutElement>();
-            if (existingRowLayout != null)
+            Transform memoryCard = FindMenuCardDeep(column, MemoryGameCardName);
+            if (memoryCard != null && memoryCard.parent != existing)
             {
-                existingRowLayout.preferredWidth = GetMenuColumnWidthReference();
+                memoryCard.SetParent(existing, false);
             }
 
-            Transform moreGamesCard = column.Find("MoreGamesCard");
-            if (moreGamesCard != null && moreGamesCard.parent != existing)
-            {
-                moreGamesCard.SetParent(existing, false);
-            }
-
-            moreGamesCard = existing.Find("MoreGamesCard");
-            if (moreGamesCard != null)
-            {
-                ResizeMenuCard(moreGamesCard, GameRowCardWidthReference);
-            }
-
-            Transform memoryCard = existing.Find(MemoryGameCardName);
             if (memoryCard != null)
             {
-                ResizeMenuCard(memoryCard, GameRowCardWidthReference);
+                ResizeGameRowMenuCard(memoryCard);
             }
 
-            existing.SetSiblingIndex(column.Find(GameCardsRowName) != null ? 1 : 0);
+            Transform mysteryCard = FindMenuCardDeep(column, MysteryBoxGameCardName);
+            if (mysteryCard != null && mysteryCard.parent != existing)
+            {
+                mysteryCard.SetParent(existing, false);
+            }
+
+            if (mysteryCard != null)
+            {
+                ResizeGameRowMenuCard(mysteryCard);
+            }
+
+            if (!existing)
+            {
+                return null;
+            }
+
+            LayoutElement existingRowLayoutElement = existing.GetComponent<LayoutElement>();
+            if (existingRowLayoutElement != null)
+            {
+                existingRowLayoutElement.preferredWidth = GameRowCardWidthReference * 2f + GameRowSpacingReference;
+            }
+
             return existing;
+        }
+
+        private static Transform EnsureMoreGamesBannerRow(Transform column)
+        {
+            if (!column)
+            {
+                return null;
+            }
+
+            Transform existing = column.Find(MoreGamesBannerRowName);
+            if (!existing)
+            {
+                GameObject rowGo = new GameObject(MoreGamesBannerRowName);
+                rowGo.transform.SetParent(column, false);
+                existing = rowGo.transform;
+            }
+
+            ConfigureMoreGamesBannerRow(column, existing);
+            return existing;
+        }
+
+        /// <summary>
+        /// Banner row must report real height to the menu column; otherwise the card draws over rows above.
+        /// </summary>
+        private static void ConfigureMoreGamesBannerRow(Transform column, Transform row)
+        {
+            if (!row)
+            {
+                return;
+            }
+
+            GameObject rowGo = row.gameObject;
+            if (!rowGo)
+            {
+                return;
+            }
+
+            VerticalLayoutGroup columnLayout = column != null ? column.GetComponent<VerticalLayoutGroup>() : null;
+            ContentSizeFitter columnFitter = column != null ? column.GetComponent<ContentSizeFitter>() : null;
+            bool columnLayoutWasEnabled = columnLayout != null && columnLayout.enabled;
+            bool columnFitterWasEnabled = columnFitter != null && columnFitter.enabled;
+            if (columnLayout != null)
+            {
+                columnLayout.enabled = false;
+            }
+
+            if (columnFitter != null)
+            {
+                columnFitter.enabled = false;
+            }
+
+            try
+            {
+                float width = GetMenuColumnWidthReference();
+                LayoutElement rowElement = rowGo.GetComponent<LayoutElement>();
+                if (rowElement == null)
+                {
+                    rowElement = rowGo.AddComponent<LayoutElement>();
+                }
+
+                rowElement.preferredWidth = width;
+                rowElement.minWidth = width;
+                rowElement.flexibleWidth = 0f;
+                rowElement.flexibleHeight = 0f;
+
+                VerticalLayoutGroup rowLayout = rowGo.GetComponent<VerticalLayoutGroup>();
+                if (rowLayout == null)
+                {
+                    rowLayout = rowGo.AddComponent<VerticalLayoutGroup>();
+                }
+
+                rowLayout.childAlignment = TextAnchor.MiddleCenter;
+                rowLayout.spacing = 0f;
+                rowLayout.padding = new RectOffset(0, 0, 0, 0);
+                rowLayout.childControlWidth = true;
+                rowLayout.childControlHeight = true;
+                rowLayout.childForceExpandWidth = false;
+                rowLayout.childForceExpandHeight = false;
+
+                ContentSizeFitter fitter = rowGo.GetComponent<ContentSizeFitter>();
+                if (fitter == null)
+                {
+                    fitter = rowGo.AddComponent<ContentSizeFitter>();
+                }
+
+                fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+                fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            }
+            finally
+            {
+                if (columnLayout != null)
+                {
+                    columnLayout.enabled = columnLayoutWasEnabled;
+                }
+
+                if (columnFitter != null)
+                {
+                    columnFitter.enabled = columnFitterWasEnabled;
+                }
+            }
+        }
+
+        private static void SetMenuRowOrder(Transform column)
+        {
+            Transform gamesRow = column.Find(GameCardsRowName);
+            Transform extraRow = column.Find(MoreGamesRowName);
+            Transform bannerRow = column.Find(MoreGamesBannerRowName);
+            int index = 0;
+            if (gamesRow != null)
+            {
+                gamesRow.SetSiblingIndex(index++);
+            }
+
+            if (extraRow != null)
+            {
+                extraRow.SetSiblingIndex(index++);
+            }
+
+            if (bannerRow != null)
+            {
+                bannerRow.SetSiblingIndex(index);
+            }
+        }
+
+        private static void ResizeMoreGamesBanner(Transform card)
+        {
+            if (card == null)
+            {
+                return;
+            }
+
+            float width = GetMenuColumnWidthReference();
+            Image art = GetMoreGamesBannerArt(card);
+            float height = GetMoreGamesBannerHeight(width, art != null ? art.sprite : null);
+            LayoutElement layout = card.GetComponent<LayoutElement>();
+            if (layout == null)
+            {
+                layout = card.gameObject.AddComponent<LayoutElement>();
+            }
+
+            layout.preferredWidth = width;
+            layout.preferredHeight = height;
+            layout.minWidth = width;
+            layout.minHeight = height;
+            layout.flexibleWidth = 0f;
+            layout.flexibleHeight = 0f;
+
+            if (card is RectTransform cardRect)
+            {
+                cardRect.sizeDelta = new Vector2(width, height);
+            }
+
+            if (art != null)
+            {
+                art.preserveAspect = true;
+            }
+
+            Transform bannerRow = card.parent;
+            if (bannerRow != null && bannerRow.name == MoreGamesBannerRowName)
+            {
+                ConfigureMoreGamesBannerRow(bannerRow.parent, bannerRow);
+            }
+
+            MarkMainMenuLayoutDirty(card);
+        }
+
+        private static void MarkMainMenuLayoutDirty(Transform fromCard)
+        {
+            if (!fromCard)
+            {
+                return;
+            }
+
+            Transform column = fromCard;
+            while (column)
+            {
+                if (column.name == "MainMenuRoot")
+                {
+                    if (column is RectTransform columnRect)
+                    {
+                        LayoutRebuilder.MarkLayoutForRebuild(columnRect);
+                    }
+
+                    return;
+                }
+
+                Transform parent = column.parent;
+                if (!parent)
+                {
+                    return;
+                }
+
+                column = parent;
+            }
+        }
+
+        private static float GetMoreGamesBannerHeight(float width, Sprite sprite)
+        {
+            float maxHeight = width * MoreGamesBannerAspectHeightOverWidth;
+            if (sprite == null)
+            {
+                return maxHeight;
+            }
+
+            float naturalHeight = width * (sprite.rect.height / sprite.rect.width);
+            return Mathf.Min(naturalHeight, maxHeight);
+        }
+
+        private static Image GetMoreGamesBannerArt(Transform card)
+        {
+            if (card == null)
+            {
+                return null;
+            }
+
+            Transform bannerArt = card.Find("BannerArt");
+            if (bannerArt != null)
+            {
+                return bannerArt.GetComponent<Image>();
+            }
+
+            return card.Find("CardContent/Art")?.GetComponent<Image>();
+        }
+
+        private static void UpgradeMoreGamesBannerCard(
+            Transform card,
+            Sprite sprite,
+            UnityEngine.Events.UnityAction onClick)
+        {
+            if (!card)
+            {
+                return;
+            }
+
+            if (card.Find("BannerArt") != null)
+            {
+                Image existingArt = GetMoreGamesBannerArt(card);
+                if (existingArt != null && sprite != null)
+                {
+                    existingArt.sprite = sprite;
+                    existingArt.preserveAspect = true;
+                }
+
+                return;
+            }
+
+            Transform legacyContent = card.Find("CardContent");
+            if (legacyContent != null)
+            {
+                legacyContent.SetParent(null, false);
+                Object.Destroy(legacyContent.gameObject);
+            }
+
+            if (!card)
+            {
+                return;
+            }
+
+            BuildMoreGamesBannerContent(card, sprite, onClick);
         }
 
         private static float GetMenuColumnWidthReference()
@@ -323,6 +939,24 @@ namespace DressUpGame.UI
             }
 
             columnRect.sizeDelta = new Vector2(GetMenuColumnWidthReference(), columnRect.sizeDelta.y);
+        }
+
+        private static void ResizeGameRowMenuCard(Transform card)
+        {
+            LayoutElement layout = card.GetComponent<LayoutElement>();
+            if (layout == null)
+            {
+                return;
+            }
+
+            layout.preferredWidth = GameRowCardWidthReference;
+            layout.preferredHeight = GetStandardGameRowCardHeight();
+
+            Image art = card.Find("CardContent/Art")?.GetComponent<Image>();
+            if (art != null)
+            {
+                art.preserveAspect = true;
+            }
         }
 
         private static void ResizeMenuCard(Transform card, float width)
@@ -350,9 +984,9 @@ namespace DressUpGame.UI
                 if (hint == null)
                 {
                     hint = cardHost.AddComponent<MenuCardPlayHintBorder>();
-                    hint.Build();
                 }
 
+                hint.Build();
                 return;
             }
 
@@ -364,6 +998,11 @@ namespace DressUpGame.UI
 
         private void HandleMenuLayoutInsetChanged()
         {
+            if (SceneManager.GetActiveScene().name != MenuSceneName)
+            {
+                return;
+            }
+
             ApplyMenuLayout();
         }
 
@@ -371,10 +1010,23 @@ namespace DressUpGame.UI
         {
             yield return null;
             ApplyMenuLayout();
+            EnsureMenuCardsLayoutOnExistingMenu();
+            EnsureMoreGamesBannerPresent();
+            Canvas canvasForStamp = FindAnyObjectByType<Canvas>();
+            if (canvasForStamp != null)
+            {
+                StampMenuLayoutVersion(canvasForStamp.transform);
+            }
+
             BottomBannerAdController.EnsureBannerActive();
             BottomBannerAdController.RefreshVisibility();
 
             Canvas canvas = FindAnyObjectByType<Canvas>();
+            if (canvas != null)
+            {
+                RebuildMainMenuLayoutImmediate(canvas.transform);
+            }
+
             Transform soundOverlay = canvas != null
                 ? canvas.transform.Find(SoundToggleButton.OverlayName)
                 : null;
@@ -420,6 +1072,11 @@ namespace DressUpGame.UI
         private void OnDestroy()
         {
             BottomBannerAdController.LayoutInsetChanged -= HandleMenuLayoutInsetChanged;
+            if (deferredMenuLayoutRebuild != null)
+            {
+                StopCoroutine(deferredMenuLayoutRebuild);
+                deferredMenuLayoutRebuild = null;
+            }
         }
 
         private void ApplyMenuBottomInset()
@@ -497,9 +1154,15 @@ namespace DressUpGame.UI
 
         private void BuildMenu(Transform canvasRoot)
         {
-            if (canvasRoot.Find("MainMenuRoot") != null)
+            Transform existingRoot = canvasRoot.Find("MainMenuRoot");
+            if (existingRoot != null)
             {
-                return;
+                if (MainMenuLayoutMarker.IsCurrent(existingRoot))
+                {
+                    return;
+                }
+
+                ClearMainMenuUiForRebuild(canvasRoot, destroyAllRoots: true);
             }
 
             CreateFullScreenBackground(canvasRoot);
@@ -539,6 +1202,7 @@ namespace DressUpGame.UI
             Sprite gameSprite = LoadMenuSprite(GameButtonResourcePath);
             Sprite petGameSprite = LoadMenuSprite(PetGameButtonResourcePath);
             Sprite memoryGameSprite = LoadMenuSprite(MemoryGameButtonResourcePath);
+            Sprite mysteryBoxGameSprite = LoadMenuSprite(MysteryBoxGameButtonResourcePath);
             Sprite moreGamesSprite = LoadMenuSprite(MoreGamesResourcePath);
 
             Transform gamesRow = EnsureGameCardsRow(columnGo.transform);
@@ -572,22 +1236,49 @@ namespace DressUpGame.UI
                     layoutHostName: MemoryGameCardName);
             }
 
-            if (moreGamesSprite != null)
+            if (mysteryBoxGameSprite != null)
             {
                 CreateMenuCard(
                     secondaryGamesRow,
-                    moreGamesSprite,
+                    mysteryBoxGameSprite,
                     GameRowCardWidthReference,
                     true,
                     FrameColor,
-                    HandleMoreGamesClicked,
-                    showPlayHintBorder: false);
+                    StartMysteryBoxGame,
+                    showPlayHintBorder: false,
+                    layoutHostName: MysteryBoxGameCardName);
             }
+
+            Transform moreGamesBannerRow = EnsureMoreGamesBannerRow(columnGo.transform);
+
+            if (moreGamesBannerRow != null && moreGamesSprite != null)
+            {
+                CreateMoreGamesBannerCard(moreGamesBannerRow, moreGamesSprite, HandleMoreGamesClicked);
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "MainMenuScreenController: More Games banner sprite missing at Resources/UI/menu/banner-more.");
+            }
+
+            if (memoryGameSprite == null)
+            {
+                Debug.LogWarning(
+                    "MainMenuScreenController: Memory (game 3) button sprite missing at Resources/UI/menu/game_3.");
+            }
+
+            if (mysteryBoxGameSprite == null)
+            {
+                Debug.LogWarning(
+                    "MainMenuScreenController: Mystery Box (game 4) button sprite missing at Resources/UI/menu/game_4.");
+            }
+
+            SetMenuRowOrder(columnGo.transform);
         }
 
         private void HandleMoreGamesClicked()
         {
-            if (isMoreGamesAdPending || isStartingGame || isStartingMemoryGame)
+            if (isMoreGamesAdPending || isStartingGame || isStartingMemoryGame || isStartingMysteryBoxGame)
             {
                 return;
             }
@@ -735,6 +1426,68 @@ namespace DressUpGame.UI
             button.onClick.AddListener(onClick);
         }
 
+        private static void CreateMoreGamesBannerCard(
+            Transform parent,
+            Sprite artSprite,
+            UnityEngine.Events.UnityAction onClick)
+        {
+            float width = GetMenuColumnWidthReference();
+            float height = GetMoreGamesBannerHeight(width, artSprite);
+
+            GameObject layoutHost = new GameObject("MoreGamesCard");
+            layoutHost.transform.SetParent(parent, false);
+
+            LayoutElement layoutElement = layoutHost.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = width;
+            layoutElement.preferredHeight = height;
+            layoutElement.minWidth = width;
+            layoutElement.minHeight = height;
+            layoutElement.flexibleWidth = 0f;
+            layoutElement.flexibleHeight = 0f;
+
+            RectTransform hostRect = layoutHost.GetComponent<RectTransform>();
+            hostRect.sizeDelta = new Vector2(width, height);
+
+            BuildMoreGamesBannerContent(layoutHost.transform, artSprite, onClick);
+        }
+
+        /// <summary>
+        /// Wide menu banner: the sprite is the button graphic (no card frame/mask).
+        /// </summary>
+        private static void BuildMoreGamesBannerContent(
+            Transform layoutHost,
+            Sprite artSprite,
+            UnityEngine.Events.UnityAction onClick)
+        {
+            GameObject artGo = new GameObject("BannerArt");
+            artGo.transform.SetParent(layoutHost, false);
+            RectTransform artRect = artGo.AddComponent<RectTransform>();
+            StretchRect(artRect);
+
+            Image artImage = artGo.AddComponent<Image>();
+            artImage.sprite = artSprite;
+            artImage.preserveAspect = true;
+            artImage.type = Image.Type.Simple;
+            artImage.color = Color.white;
+            artImage.raycastTarget = true;
+
+            Button button = artGo.AddComponent<Button>();
+            button.targetGraphic = artImage;
+            button.interactable = true;
+            ColorBlock colors = button.colors;
+            colors.normalColor = Color.white;
+            colors.highlightedColor = new Color(0.96f, 0.96f, 0.96f, 1f);
+            colors.pressedColor = new Color(0.9f, 0.9f, 0.9f, 1f);
+            colors.disabledColor = new Color(0.92f, 0.92f, 0.92f, 1f);
+            colors.fadeDuration = 0.08f;
+            button.colors = colors;
+
+            if (onClick != null)
+            {
+                button.onClick.AddListener(onClick);
+            }
+        }
+
         private static void CreateMenuCard(
             Transform parent,
             Sprite artSprite,
@@ -746,7 +1499,8 @@ namespace DressUpGame.UI
             string layoutHostName = null)
         {
             float aspect = artSprite.rect.height / artSprite.rect.width;
-            float cardHeight = cardWidth * aspect;
+            bool isGameRowCard = Mathf.Approximately(cardWidth, GameRowCardWidthReference);
+            float cardHeight = isGameRowCard ? GetStandardGameRowCardHeight() : cardWidth * aspect;
 
             string cardName = layoutHostName ?? (interactable ? "PlayGameCard" : "MoreGamesCard");
             GameObject layoutHost = new GameObject(cardName);
@@ -759,14 +1513,29 @@ namespace DressUpGame.UI
             RectTransform hostRect = layoutHost.GetComponent<RectTransform>();
             hostRect.sizeDelta = new Vector2(cardWidth, cardHeight);
 
+            BuildMenuCardContent(
+                layoutHost.transform,
+                artSprite,
+                interactable,
+                onClick,
+                preserveAspect: isGameRowCard);
+
             if (showPlayHintBorder)
             {
                 MenuCardPlayHintBorder hintBorder = layoutHost.AddComponent<MenuCardPlayHintBorder>();
                 hintBorder.Build();
             }
+        }
 
+        private static void BuildMenuCardContent(
+            Transform layoutHost,
+            Sprite artSprite,
+            bool interactable,
+            UnityEngine.Events.UnityAction onClick,
+            bool preserveAspect)
+        {
             GameObject cardGo = new GameObject("CardContent");
-            cardGo.transform.SetParent(layoutHost.transform, false);
+            cardGo.transform.SetParent(layoutHost, false);
             RectTransform cardRect = cardGo.AddComponent<RectTransform>();
             StretchRect(cardRect);
 
@@ -798,7 +1567,7 @@ namespace DressUpGame.UI
 
             Image artImage = artGo.AddComponent<Image>();
             artImage.sprite = artSprite;
-            artImage.preserveAspect = false;
+            artImage.preserveAspect = preserveAspect;
             artImage.type = Image.Type.Simple;
             artImage.color = Color.white;
 
@@ -835,6 +1604,18 @@ namespace DressUpGame.UI
                 return sprite;
             }
 
+            Object[] subAssets = Resources.LoadAll(resourcePath);
+            if (subAssets != null)
+            {
+                for (int i = 0; i < subAssets.Length; i++)
+                {
+                    if (subAssets[i] is Sprite subSprite)
+                    {
+                        return subSprite;
+                    }
+                }
+            }
+
             Texture2D texture = Resources.Load<Texture2D>(resourcePath);
             if (texture == null)
             {
@@ -851,7 +1632,7 @@ namespace DressUpGame.UI
 
         private void StartDressUpGame()
         {
-            if (isStartingGame || isStartingPetGame || isStartingMemoryGame)
+            if (isStartingGame || isStartingPetGame || isStartingMemoryGame || isStartingMysteryBoxGame)
             {
                 return;
             }
@@ -863,7 +1644,7 @@ namespace DressUpGame.UI
 
         private void StartPetGame()
         {
-            if (isStartingPetGame || isStartingGame || isStartingMemoryGame)
+            if (isStartingPetGame || isStartingGame || isStartingMemoryGame || isStartingMysteryBoxGame)
             {
                 return;
             }
@@ -875,13 +1656,24 @@ namespace DressUpGame.UI
 
         private void StartMemoryGame()
         {
-            if (isStartingMemoryGame || isStartingGame || isStartingPetGame)
+            if (isStartingMemoryGame || isStartingGame || isStartingPetGame || isStartingMysteryBoxGame)
             {
                 return;
             }
 
             isStartingMemoryGame = true;
             StartCoroutine(LoadGameplaySceneRoutine(MemorySceneName, () => isStartingMemoryGame = false));
+        }
+
+        private void StartMysteryBoxGame()
+        {
+            if (isStartingMysteryBoxGame || isStartingGame || isStartingPetGame || isStartingMemoryGame)
+            {
+                return;
+            }
+
+            isStartingMysteryBoxGame = true;
+            StartCoroutine(LoadGameplaySceneRoutine(MysteryBoxSceneName, () => isStartingMysteryBoxGame = false));
         }
 
         private IEnumerator ActivateMainSceneRoutine()

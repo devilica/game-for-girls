@@ -37,6 +37,11 @@ namespace DressUpGame.UI
 
         private void HandleLayoutInsetChanged()
         {
+            if (!isActiveAndEnabled || !gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
             if (IsDoneViewActive())
             {
                 CharacterCustomizer customizer = FindAnyObjectByType<CharacterCustomizer>();

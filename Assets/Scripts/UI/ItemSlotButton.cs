@@ -47,6 +47,7 @@ namespace DressUpGame.UI
 
         public string ItemId => itemId;
         public int CardIndex { get; private set; }
+        public bool UsesAdBorder => useAdBorder;
         public event Action<ItemSlotButton> Clicked;
 
         private void Awake()
@@ -172,6 +173,31 @@ namespace DressUpGame.UI
             CardIndex = index;
             useAdBorder = isAdGated;
             ApplyCardBorderStyle();
+            RefreshConnectivityForAdGate();
+        }
+
+        /// <summary>
+        /// Ad-bordered cards are not clickable offline (rewarded ad required).
+        /// </summary>
+        public void RefreshConnectivityForAdGate()
+        {
+            if (button == null)
+            {
+                button = GetComponent<Button>();
+            }
+
+            if (button == null)
+            {
+                return;
+            }
+
+            if (!useAdBorder)
+            {
+                button.interactable = true;
+                return;
+            }
+
+            button.interactable = NetworkReachabilityUtility.IsInternetAvailable();
         }
 
         /// <summary>
