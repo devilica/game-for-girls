@@ -1,4 +1,5 @@
 using DressUpGame.Memory;
+using DressUpGame.MysteryBox;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 #if ENABLE_INPUT_SYSTEM
@@ -15,6 +16,7 @@ namespace DressUpGame.UI
         private const string MainSceneName = "MainScene";
         private const string PetSceneName = "PetScene";
         private const string MemorySceneName = MemoryGameController.MemorySceneName;
+        private const string MysteryBoxSceneName = MysteryBoxController.MysteryBoxSceneName;
         private const string SplashSceneName = "SplashScene";
         private const float ExitConfirmWindowSeconds = 2f;
 
@@ -119,6 +121,16 @@ namespace DressUpGame.UI
                 if (memory != null)
                 {
                     memory.TryHandleBackNavigation();
+                    return;
+                }
+            }
+
+            if (sceneName == MysteryBoxSceneName)
+            {
+                MysteryBoxController mystery = FindAnyObjectByType<MysteryBoxController>();
+                if (mystery != null)
+                {
+                    mystery.TryHandleBackNavigation();
                     return;
                 }
             }

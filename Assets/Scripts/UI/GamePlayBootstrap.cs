@@ -1,5 +1,6 @@
 using DressUpGame.Character;
 using DressUpGame.Memory;
+using DressUpGame.MysteryBox;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -121,7 +122,9 @@ namespace DressUpGame.UI
 
         private void ConfigureUILayout()
         {
-            if (SceneManager.GetActiveScene().name == MemoryGameController.MemorySceneName)
+            string sceneName = SceneManager.GetActiveScene().name;
+            if (sceneName == MemoryGameController.MemorySceneName
+                || sceneName == MysteryBoxController.MysteryBoxSceneName)
             {
                 return;
             }

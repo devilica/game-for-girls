@@ -1,4 +1,5 @@
 using System.Collections;
+using DressUpGame.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -147,10 +148,11 @@ namespace DressUpGame.Memory
                 button.colors = colors;
             }
 
-            const float pulsePeriodSeconds = 0.85f;
             while (true)
             {
-                float t = Mathf.PingPong((Time.unscaledTime + phaseOffsetSeconds) / pulsePeriodSeconds, 1f);
+                float t = Mathf.PingPong(
+                    (Time.unscaledTime + phaseOffsetSeconds) / UiBorderCelebrationStyle.PulsePeriodSeconds,
+                    1f);
                 if (borderImage != null)
                 {
                     borderImage.color = Color.Lerp(celebrationBaseBorderColor, celebrationAccentBorderColor, t);

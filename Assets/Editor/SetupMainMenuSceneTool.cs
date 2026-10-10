@@ -18,6 +18,7 @@ namespace DressUpGame.Editor
         private const string MainScenePath = "Assets/Scenes/MainScene.unity";
         private const string PetScenePath = "Assets/Scenes/PetScene.unity";
         private const string MemoryScenePath = "Assets/Scenes/MemoryScene.unity";
+        private const string MysteryBoxScenePath = "Assets/Scenes/MysteryBoxScene.unity";
 
         [MenuItem("Dress Up Game/Setup Main Menu Scene")]
         public static void SetupMainMenuScene()
@@ -65,6 +66,15 @@ namespace DressUpGame.Editor
                 if (!string.IsNullOrEmpty(memoryGuid))
                 {
                     scenes.Add(new EditorBuildSettingsScene(MemoryScenePath, true));
+                }
+            }
+
+            if (System.IO.File.Exists(MysteryBoxScenePath))
+            {
+                string mysteryGuid = AssetDatabase.AssetPathToGUID(MysteryBoxScenePath);
+                if (!string.IsNullOrEmpty(mysteryGuid))
+                {
+                    scenes.Add(new EditorBuildSettingsScene(MysteryBoxScenePath, true));
                 }
             }
 

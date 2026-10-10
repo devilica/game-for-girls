@@ -23,7 +23,10 @@ namespace DressUpGame.Memory
         private const string StartAgainSpriteResourcePath = "UI/startagain";
         private const float MismatchHideDelaySeconds = 0.75f;
         private const float BoardPaddingReference = 36f;
-        private const float BoardTopInsetReference = 180f;
+        private const float BoardTopInsetReference = 240f;
+        private const float HeaderBannerWidthReference = 900f;
+        private const float HeaderBannerHeightReference = 200f;
+        private const float HeaderBannerTopOffsetReference = 32f;
         private const float BoardBottomInsetReference = 140f;
         private const float BoardBannerReserveReferenceUnits = 90f;
         private const float GridSpacingReference = 8f;
@@ -37,8 +40,6 @@ namespace DressUpGame.Memory
         private const float StartAgainBlinkMaxScale = 1.06f;
 
         private static readonly Color CardBackColor = new Color(1f, 0.94f, 0.97f, 1f);
-        private static readonly Color CardBorderColor = new Color(0.95f, 0.45f, 0.72f, 1f);
-        private static readonly Color WinBorderAccentColor = new Color(1f, 0.92f, 0.55f, 1f);
         private static readonly Color AdCardFaceColor = new Color(1f, 0.88f, 0.94f, 1f);
 
         [SerializeField] private MemoryBowCatalog bowCatalog;
@@ -448,6 +449,57 @@ namespace DressUpGame.Memory
             float safeTop = SafeAreaInsets.GetTopInsetReferenceUnits(scaler);
             HomeMenuButton.EnsureOnCanvas(canvas.transform)?.ApplyTopLeftLayout(safeTop);
             SoundToggleButton.EnsureOnCanvas(canvas.transform)?.ApplyTopRightLayout(safeTop);
+            ApplyHeaderBannerLayout(canvas.transform, safeTop);
+        }
+
+        private static void EnsureHeaderBanner(Transform canvasRoot)
+        {
+            if (canvasRoot == null)
+            {
+                return;
+            }
+
+            Transform existing = canvasRoot.Find("HeaderBanner");
+            if (existing != null)
+            {
+                Image existingImage = existing.GetComponent<Image>();
+                if (existingImage != null && existingImage.sprite == null)
+                {
+                    existingImage.sprite = MemoryGameArt.LoadHeaderSprite();
+                }
+
+                return;
+            }
+
+            GameObject headerGo = new GameObject("HeaderBanner");
+            headerGo.transform.SetParent(canvasRoot, false);
+            RectTransform rect = headerGo.AddComponent<RectTransform>();
+            Image image = headerGo.AddComponent<Image>();
+            image.sprite = MemoryGameArt.LoadHeaderSprite();
+            image.preserveAspect = true;
+            image.raycastTarget = false;
+            ApplyHeaderBannerLayout(canvasRoot, 0f);
+        }
+
+        private static void ApplyHeaderBannerLayout(Transform canvasRoot, float safeTopInset)
+        {
+            Transform header = canvasRoot != null ? canvasRoot.Find("HeaderBanner") : null;
+            if (header == null)
+            {
+                return;
+            }
+
+            RectTransform rect = header as RectTransform;
+            if (rect == null)
+            {
+                return;
+            }
+
+            rect.anchorMin = new Vector2(0.5f, 1f);
+            rect.anchorMax = new Vector2(0.5f, 1f);
+            rect.pivot = new Vector2(0.5f, 1f);
+            rect.anchoredPosition = new Vector2(0f, -(HeaderBannerTopOffsetReference + safeTopInset));
+            rect.sizeDelta = new Vector2(HeaderBannerWidthReference, HeaderBannerHeightReference);
         }
 
         private void ApplyStartAgainLayoutIfVisible(Canvas canvas)
@@ -538,6 +590,7 @@ namespace DressUpGame.Memory
 
             if (canvas != null)
             {
+                EnsureHeaderBanner(canvas.transform);
                 SoundToggleButton.EnsureOnCanvas(canvas.transform);
                 HomeMenuButton.EnsureOnCanvas(canvas.transform);
                 ApplyMemoryTopBarLayout(canvas);
@@ -889,13 +942,13 @@ namespace DressUpGame.Memory
             Image borderImage = cardGo.AddComponent<Image>();
             borderImage.sprite = UiRoundSpriteUtility.GetRoundedSquareSprite();
             borderImage.type = Image.Type.Sliced;
-            borderImage.color = CardBorderColor;
+            borderImage.color = UiBorderCelebrationStyle.BaseBorderColor;
             borderImage.raycastTarget = true;
 
             Button button = cardGo.AddComponent<Button>();
             button.targetGraphic = borderImage;
             ColorBlock colors = button.colors;
-            colors.normalColor = CardBorderColor;
+            colors.normalColor = UiBorderCelebrationStyle.BaseBorderColor;
             colors.highlightedColor = new Color(1f, 0.55f, 0.78f, 1f);
             colors.pressedColor = new Color(0.88f, 0.38f, 0.62f, 1f);
             colors.disabledColor = new Color(0.85f, 0.85f, 0.85f, 1f);
@@ -946,8 +999,8 @@ namespace DressUpGame.Memory
                 frontBgImage,
                 frontImage,
                 button,
-                CardBorderColor,
-                WinBorderAccentColor);
+                UiBorderCelebrationStyle.BaseBorderColor,
+                UiBorderCelebrationStyle.AccentBorderColor);
             view.Bind(this, pairId, bowSprite);
             return view;
         }

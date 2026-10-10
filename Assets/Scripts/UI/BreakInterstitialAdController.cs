@@ -98,7 +98,12 @@ namespace DressUpGame.UI
 #if UNITY_ANDROID || UNITY_IOS
         private IEnumerator ShowIfReadyRoutine()
         {
-            const float loadTimeoutSeconds = 10f;
+            if (!NetworkReachabilityUtility.IsInternetAvailable())
+            {
+                yield break;
+            }
+
+            const float loadTimeoutSeconds = 2f;
             float elapsed = 0f;
             bool preloadRequested = false;
 
@@ -124,9 +129,18 @@ namespace DressUpGame.UI
             RegisterShowHandlers();
             interstitialAd.Show();
 
-            while (!showCompleted)
+            const float showTimeoutSeconds = 20f;
+            float showElapsed = 0f;
+            while (!showCompleted && showElapsed < showTimeoutSeconds)
             {
+                showElapsed += Time.unscaledDeltaTime;
                 yield return null;
+            }
+
+            if (!showCompleted)
+            {
+                Debug.LogWarning("Break interstitial show timed out.");
+                FinishShow();
             }
         }
 

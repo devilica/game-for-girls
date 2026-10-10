@@ -30,6 +30,11 @@ namespace DressUpGame.Data
         public IReadOnlyList<AccessoryItem> AccessoryItems => accessoryItems;
 
         public HairItem GetHairById(string id) => hairItems.FirstOrDefault(item => item != null && item.Id == id);
+        public HairItem GetHairByIdExact(string id) => GetHairById(id);
+
+        public DressItem GetDressByIdExact(string id) =>
+            dressItems.FirstOrDefault(entry => entry != null && entry.Id == id);
+
         public DressItem GetDressById(string id)
         {
             DressItem item = dressItems.FirstOrDefault(entry => entry != null && entry.Id == id);
@@ -47,9 +52,12 @@ namespace DressUpGame.Data
 
             return null;
         }
+        public MakeupItem GetMakeupByIdExact(string id) =>
+            makeupItems.FirstOrDefault(entry => entry != null && entry.Id == id);
+
         public MakeupItem GetMakeupById(string id)
         {
-            MakeupItem item = makeupItems.FirstOrDefault(entry => entry != null && entry.Id == id);
+            MakeupItem item = GetMakeupByIdExact(id);
             if (item != null || string.IsNullOrEmpty(id))
             {
                 return item;
@@ -91,10 +99,14 @@ namespace DressUpGame.Data
         }
 
         public ShoeItem GetShoeById(string id) => shoeItems.FirstOrDefault(item => item != null && item.Id == id);
+        public ShoeItem GetShoeByIdExact(string id) => GetShoeById(id);
+
+        public AccessoryItem GetAccessoryByIdExact(string id) =>
+            accessoryItems.FirstOrDefault(entry => entry != null && entry.Id == id);
 
         public AccessoryItem GetAccessoryById(string id)
         {
-            AccessoryItem item = accessoryItems.FirstOrDefault(entry => entry != null && entry.Id == id);
+            AccessoryItem item = GetAccessoryByIdExact(id);
             if (item != null || string.IsNullOrEmpty(id))
             {
                 return item;

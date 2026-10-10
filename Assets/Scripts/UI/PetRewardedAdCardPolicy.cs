@@ -1,3 +1,4 @@
+using DressUpGame.MysteryBox;
 using DressUpGame.Pet;
 
 namespace DressUpGame.UI
@@ -9,6 +10,11 @@ namespace DressUpGame.UI
     {
         public static bool IsAdGated(PetCustomizationCategory category, int zeroBasedIndex, string itemId)
         {
+            if (!string.IsNullOrEmpty(itemId) && MysteryUnlockStore.IsUnlocked(itemId))
+            {
+                return false;
+            }
+
             return IsEverySecondCard(zeroBasedIndex);
         }
 

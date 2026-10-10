@@ -1,3 +1,4 @@
+using DressUpGame.MysteryBox;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace DressUpGame.UI
         private const string MainSceneName = "MainScene";
         private const string PetSceneName = "PetScene";
         private const string MemorySceneName = "MemoryScene";
+        private const string MysteryBoxSceneName = MysteryBoxController.MysteryBoxSceneName;
 
         private static Sprite homeSprite;
 
@@ -153,7 +155,10 @@ namespace DressUpGame.UI
 
         private static bool IsGameplayScene(string sceneName)
         {
-            return sceneName == MainSceneName || sceneName == PetSceneName || sceneName == MemorySceneName;
+            return sceneName == MainSceneName
+                || sceneName == PetSceneName
+                || sceneName == MemorySceneName
+                || sceneName == MysteryBoxSceneName;
         }
 
         private void RefreshIcon()
