@@ -17,31 +17,16 @@ Play from **MenuScene** or run the full build flow starting at **SplashScene**.
 
 Dress-up, pets, memory, and mystery gifts on device.
 
-### Makeup
+<p align="center">
+  <img src="docs/look-inside/makeup.jpg" width="280" alt="Makeup" title="Makeup" />
+  <img src="docs/look-inside/dresses.jpg" width="280" alt="Dresses" title="Dresses" /><br />
+  <img src="docs/look-inside/hairstyles.jpg" width="280" alt="Hairstyles" title="Hairstyles" />
+  <img src="docs/look-inside/pet-salon.jpg" width="280" alt="Pet salon" title="Pet salon" /><br />
+  <img src="docs/look-inside/memory-match.jpg" width="280" alt="Memory match" title="Memory match" />
+  <img src="docs/look-inside/mystery-gifts.jpg" width="280" alt="Mystery gifts" title="Mystery gifts" />
+</p>
 
-![Makeup screen](docs/look-inside/makeup.png)
-
-### Dresses
-
-![Dresses screen](docs/look-inside/dresses.png)
-
-### Hairstyles
-
-![Hairstyles screen](docs/look-inside/hairstyles.png)
-
-### Pet salon
-
-![Pet salon screen](docs/look-inside/pet-salon.png)
-
-### Memory match
-
-![Memory match screen](docs/look-inside/memory-match.png)
-
-### Mystery gifts
-
-![Mystery gifts screen](docs/look-inside/mystery-gifts.png)
-
-Screenshots match the **Look inside** section on the Play Store landing site in the sibling repo `dress-up-make-up-girls` (`examples/`). Re-copy into `docs/look-inside/` when marketing images change.
+README thumbnails live in `docs/look-inside/` (400 px wide JPEG). Full screenshots are in the sibling repo `dress-up-make-up-girls` (`examples/`). After updating marketing art, run `Tools/Resize-LookInsideReadmeImages.ps1`.
 
 ## First-time setup
 
