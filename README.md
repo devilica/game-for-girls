@@ -13,6 +13,36 @@ Mobile dress-up game built with **Unity 6** (6000.5.4f1). Two playable modes fro
 
 Play from **MenuScene** or run the full build flow starting at **SplashScene**.
 
+## Look inside
+
+Dress-up, pets, memory, and mystery gifts on device.
+
+### Makeup
+
+![Makeup screen](docs/look-inside/makeup.png)
+
+### Dresses
+
+![Dresses screen](docs/look-inside/dresses.png)
+
+### Hairstyles
+
+![Hairstyles screen](docs/look-inside/hairstyles.png)
+
+### Pet salon
+
+![Pet salon screen](docs/look-inside/pet-salon.png)
+
+### Memory match
+
+![Memory match screen](docs/look-inside/memory-match.png)
+
+### Mystery gifts
+
+![Mystery gifts screen](docs/look-inside/mystery-gifts.png)
+
+Screenshots match the **Look inside** section on the Play Store landing site in the sibling repo `dress-up-make-up-girls` (`examples/`). Re-copy into `docs/look-inside/` when marketing images change.
+
 ## First-time setup
 
 1. Open the project in Unity **6000.5.4f1** (or compatible Unity 6).
